@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paulette Suro — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script>
+  // Defined here (not in js/main.js) so it exists before any <img onerror> in the
+  // page body can fire — those load during initial HTML parsing, ahead of scripts
+  // placed at the end of <body>.
+  window.FALLBACK_IMG =
+    "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='400' height='300' fill='%23eeeeee'/%3E%3Ctext x='50%25' y='50%25' font-family='monospace' font-size='16' fill='%23999999' text-anchor='middle' dominant-baseline='middle'%3EADD PHOTO%3C/text%3E%3C/svg%3E";
+  window.handleImgError = function (img) {
+    img.onerror = null;
+    img.src = window.FALLBACK_IMG;
+  };
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="#top" class="wordmark">PAULETTE</a>
+  <nav class="main-nav">
+    <a href="#featured">WORK</a>
+    <a href="#experience">EXPERIENCE</a>
+    <a href="#leadership">LEADERSHIP</a>
+    <a href="#toolbox">TOOLBOX</a>
+    <a href="#about">ABOUT</a>
+    <span class="nav-star" aria-hidden="true">★</span>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="hero-section">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow-tag">ENGINEER / RESEARCHER / BUILDER</span>
+        <h1>Turning <em>Ideas</em> Into Impact</h1>
+        <p class="hero-bio">
+          I'm a mechanical/bioengineer interested in electrochemical sensing,
+          MEMS fabrication, and mechanical design — from a master's thesis on
+          glucose-sensing electrodes to hands-on suspension design and
+          hardware testing. This site collects the projects I'm proudest of.
+        </p>
+        <a href="#featured" class="btn-primary">VIEW MY WORK →</a>
+        <p class="hero-margin-note">Collect<br>Build<br>Improve<br>Repeat <span class="margin-star">★</span></p>
+      </div>
+
+      <div class="hero-photo-frame">
+        <div class="binder-clip" aria-hidden="true"></div>
+        <img src="images/about-photo.jpg" alt="Paulette Suro" onerror="handleImgError(this)">
+        <p class="photo-caption">Same girl... just building bigger things. —P.S.</p>
+      </div>
+
+      <div class="hero-sidebar">
+        <ul>
+          <li>MECHANICAL</li>
+          <li>BIOENGINEERING</li>
+          <li>SENSORS</li>
+          <li>DEVICES</li>
+          <li>RESEARCH</li>
+          <li>DESIGN</li>
+          <li>PEOPLE</li>
+        </ul>
+
+        <div id="toolbox" class="toolbox-mini">
+          <button class="toolbox-mini-toggle" id="toolbox-toggle" aria-expanded="false" aria-controls="toolbox-stage" aria-label="Open engineering software toolbox">
+            <span>MY ENGINEERING TOOLBOX</span>
+            <span class="toolbox-mini-hint" id="toolbox-hint">Click to open</span>
+          </button>
+          <div class="toolbox-stage" id="toolbox-stage" data-state="closed">
+            <img class="toolbox-frame" data-frame="closed" alt="Closed glossy red toolbox">
+            <img class="toolbox-frame" data-frame="partial" alt="" aria-hidden="true">
+            <img class="toolbox-frame" data-frame="open" alt="Open toolbox with software tools in each tray">
+            <div class="toolbox-badges" id="toolbox-badges"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="featured" class="section-wrap">
+    <div class="section-eyebrow">
+      <span>01 / WORK</span>
+    </div>
+    <h2 class="section-heading">Featured Projects</h2>
+    <hr class="rule">
+    <div class="filter-bar" id="filter-bar" role="tablist" aria-label="Filter projects by subject"></div>
+    <div class="card-grid" id="featured-grid"></div>
+  </section>
+
+  <section id="experience" class="project-section">
+    <h2 class="section-heading">Experience</h2>
+    <hr class="rule">
+    <div class="card-grid" id="experience-grid" style="margin-top:1.5rem;"></div>
+  </section>
+
+  <section id="leadership" class="project-section">
+    <h2 class="section-heading">Leadership</h2>
+    <hr class="rule">
+    <div class="card-grid" id="leadership-grid" style="margin-top:1.5rem;"></div>
+  </section>
+
+  <section id="about" class="about-section">
+    <h2 class="section-heading">About</h2>
+    <hr class="rule" style="margin-bottom:2rem;">
+    <div class="about-content">
+      <div class="about-photo">
+        <!-- Drop your photo at images/about-photo.jpg (any image works, just keep this filename) -->
+        <img src="images/about-photo.jpg" alt="Paulette Suro" onerror="handleImgError(this)">
+      </div>
+      <div class="about-text">
+        <p>I'm currently finishing my M.S. in Bioengineering at San Diego
+        State University (B.S. in Mechanical Engineering, Bioengineering
+        Emphasis, 2025), based in San Diego, CA. My focus areas are
+        electrochemical sensing, MEMS fabrication, and mechanical design.
+        <!-- EDIT ME: add what you're looking for next (internships, full-time roles, collaborators) --></p>
+        <p>Thanks for exploring my work.</p>
+        <p class="contact-links">
+          <a href="mailto:paulette.suro@gmail.com">paulette.suro@gmail.com</a> ·
+          <a href="https://www.linkedin.com/in/paulette-suro/">LINKEDIN</a> ·
+          <!-- Drop your resume at the project root as resume.pdf (same folder as index.html) -->
+          <a href="resume.pdf">RESUME (PDF)</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>&copy; <span id="year"></span> Paulette Suro</p>
+</footer>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-clip" aria-hidden="true"></div>
+    <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+
+    <div class="modal-topbar">
+      <button class="modal-back" id="modal-back">← ALL PROJECTS</button>
+      <span class="modal-pagination" id="modal-pagination"></span>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-main">
+        <p class="modal-tag" id="modal-tag"></p>
+        <h3 id="modal-title"></h3>
+        <p class="modal-context" id="modal-context"></p>
+        <div class="modal-description" id="modal-description"></div>
+        <div class="card-tags" id="modal-tags"></div>
+        <div class="modal-links" id="modal-links"></div>
+
+        <div class="modal-hero-block" id="modal-hero-block">
+          <div class="modal-hero-image" id="modal-hero-image"></div>
+          <div class="modal-hero-support" id="modal-hero-support"></div>
+        </div>
+        <p class="modal-hero-caption" id="modal-hero-caption"></p>
+      </div>
+
+      <aside class="modal-sidebar">
+        <div class="sidebar-block" id="sidebar-problem" hidden>
+          <h4>The Problem</h4>
+          <p id="modal-problem"></p>
+        </div>
+        <div class="sidebar-block" id="sidebar-role" hidden>
+          <h4>My Role</h4>
+          <p id="modal-role"></p>
+        </div>
+        <div class="sidebar-block" id="sidebar-results" hidden>
+          <h4>Key Results</h4>
+          <ul id="modal-results"></ul>
+        </div>
+        <div class="sidebar-block" id="sidebar-tools" hidden>
+          <h4>Tools Used</h4>
+          <div class="sidebar-tools" id="modal-tools"></div>
+        </div>
+        <span class="sidebar-star" aria-hidden="true">★</span>
+      </aside>
+    </div>
+
+    <div class="modal-process" id="modal-process-section" hidden>
+      <h4 class="modal-process-title">PROCESS</h4>
+      <div id="modal-process-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox: click any project photo to see it full-size -->
+<div class="lightbox-overlay" id="lightbox-overlay">
+  <img id="lightbox-image" src="" alt="">
+</div>
+
+<script src="js/data.js?v=19"></script>
+<script src="js/toolbox-data.js?v=19"></script>
+<script src="js/main.js?v=19"></script>
+</body>
+</html>
