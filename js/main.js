@@ -156,6 +156,110 @@ function setSidebarBlock(blockId, fieldId, value, isList) {
   }
 }
 
+// ---------------- Timeline (sidebar, per project) ----------------
+const MONTH_ABBR = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTH_INDEX = { january:0, february:1, march:2, april:3, may:4, june:5, july:6, august:7, september:8, october:9, november:10, december:11 };
+
+// Parses "August 2024 – May 2025" (month optional, single-year strings also
+// work) into {startYear, endYear, startMonth, endMonth} — startMonth/endMonth
+// are 0-11 or null when no month was given, used both for the fractional
+// timeline position and for the "Aug 2024" style labels.
+function parseDateRange(str) {
+  if (!str) return null;
+  const parts = str.split(/[–-]/).map(s => s.trim());
+  const parseOne = part => {
+    if (!part) return null;
+    const yearMatch = part.match(/\d{4}/);
+    if (!yearMatch) return null;
+    const monthMatch = part.match(/[A-Za-z]+/);
+    const monthIdx = monthMatch ? MONTH_INDEX[monthMatch[0].toLowerCase()] : undefined;
+    return { year: parseInt(yearMatch[0], 10), month: monthIdx === undefined ? null : monthIdx };
+  };
+  const start = parseOne(parts[0]);
+  if (!start) return null;
+  const end = parseOne(parts[1]) || start;
+  return { startYear: start.year, endYear: end.year, startMonth: start.month, endMonth: end.month };
+}
+
+function monthYearLabel(year, month) {
+  return month === null ? String(year) : `${MONTH_ABBR[month]} ${year}`;
+}
+
+// School, shown on every project's timeline as fixed reference points — not
+// tied to any project id, so they never highlight as "current".
+const EDUCATION_MILESTONES = [
+  { title: "B.S. Mechanical Engineering, SDSU", dates: "August 2021 – May 2025" },
+  { title: "M.S. Bioengineering, SDSU", dates: "August 2025 – July 2026" }
+].map(e => ({ ...e, range: parseDateRange(e.dates) }));
+
+const TIMELINE_ENTRIES = PROJECTS
+  .map(p => ({ id: p.id, title: p.title, dates: p.dates, range: parseDateRange(p.dates) }))
+  .filter(e => e.range);
+
+// Fractional year (e.g. Aug 2024 -> 2024.58) so positions reflect the actual
+// month, not just the year.
+function fractionalYear(year, month) {
+  return year + (month === null ? 0 : month / 12);
+}
+// One merged, chronologically-sorted list — a vertical timeline reads
+// top-to-bottom in time order, unlike the old horizontal strip which grouped
+// education separately.
+const TIMELINE_ALL = [
+  ...EDUCATION_MILESTONES.map(e => ({ ...e, isEducation: true })),
+  ...TIMELINE_ENTRIES.map(e => ({ ...e, isEducation: false }))
+].sort((a, b) => fractionalYear(a.range.startYear, a.range.startMonth) - fractionalYear(b.range.startYear, b.range.startMonth));
+
+function timelineTemplate(currentId) {
+  const rows = TIMELINE_ALL.map(e => {
+    const isCurrent = !e.isEducation && e.id === currentId;
+    const rangeLabel = e.dates || monthYearLabel(e.range.startYear, e.range.startMonth);
+    const classes = ["tl-row", isCurrent ? "is-current" : "", e.isEducation ? "is-education" : ""]
+      .filter(Boolean).join(" ");
+    return `
+      <div class="${classes}">
+        <div class="tl-marker"><span class="tl-dot"></span></div>
+        <div class="tl-row-content">
+          <span class="tl-row-date">${rangeLabel}</span>
+          <span class="tl-row-title">${e.title}</span>
+        </div>
+      </div>`;
+  }).join("");
+  return `<div class="timeline-track">${rows}</div>`;
+}
+
+// ---------------- Lightbox gallery (per project, images only) ----------------
+function isPlainImage(src) {
+  return !/^youtube:/.test(src) && !/\.mp4$/i.test(src);
+}
+
+function buildGallery(project) {
+  const gallery = [];
+  const finalImages = (project.finalImages && project.finalImages.length)
+    ? project.finalImages
+    : ((project.images && project.images.length) ? project.images : [project.thumb]);
+  finalImages.forEach((src, i) => {
+    if (!isPlainImage(src)) return;
+    gallery.push({ src, caption: (i === 0 && project.heroCaption) ? project.heroCaption : captionFromSrc(src) });
+  });
+  if (project.process && project.process.length) {
+    project.process.forEach(step => {
+      const imgs = (step.images && step.images.length) ? step.images : (step.image ? [step.image] : []);
+      imgs.forEach(src => {
+        if (!isPlainImage(src)) return;
+        gallery.push({ src, caption: step.caption || step.text || captionFromSrc(src) });
+      });
+    });
+  } else if (project.processImages && project.processImages.length) {
+    project.processImages.forEach(src => {
+      if (!isPlainImage(src)) return;
+      gallery.push({ src, caption: captionFromSrc(src) });
+    });
+  }
+  return gallery;
+}
+
+let currentGallery = [];
+
 function openModal(project) {
   openProjectId = project.id;
   syncOpenCardBorder();
@@ -187,9 +291,16 @@ function openModal(project) {
 
   if (project.process && project.process.length) {
     // Preferred: each process image paired with its own short paragraph.
-    modalProcessContent.innerHTML = project.process
+    // A project migrated from the legacy format can still carry a longer
+    // narrative in processDescription — keep it, appended below the rows,
+    // rather than silently dropping real written content.
+    const rows = project.process
       .map((step, i) => processStepTemplate(step, i, `${project.title} — process`))
       .join("");
+    const narrative = project.processDescription
+      ? `<div class="modal-description modal-process-narrative">${project.processDescription}</div>`
+      : "";
+    modalProcessContent.innerHTML = rows + narrative;
     modalProcessSection.hidden = false;
   } else if (project.processImages && project.processImages.length) {
     // Legacy fallback for projects not yet migrated to `process`.
@@ -237,10 +348,50 @@ function openModal(project) {
     toolsBlock.hidden = true;
   }
 
+  const timelineBlock = document.getElementById("sidebar-timeline");
+  const timelineField = document.getElementById("modal-timeline");
+  const timelineDatesField = document.getElementById("modal-timeline-dates");
+  if (TIMELINE_ENTRIES.some(e => e.id === project.id)) {
+    timelineBlock.hidden = false;
+    timelineDatesField.textContent = project.dates || "";
+    timelineField.innerHTML = timelineTemplate(project.id);
+  } else {
+    timelineBlock.hidden = true;
+  }
+
+  const teamBlock = document.getElementById("sidebar-team");
+  const teamImg = document.getElementById("modal-team-photo");
+  if (project.teamPhoto) {
+    teamBlock.hidden = false;
+    teamImg.src = project.teamPhoto;
+    teamImg.alt = `${project.title} team`;
+    teamImg.onerror = () => handleImgError(teamImg);
+  } else {
+    teamBlock.hidden = true;
+  }
+
+  // Gallery indices for the lightbox — assigned in document order, which
+  // matches buildGallery's own traversal order (hero, supports, process).
+  currentGallery = buildGallery(project);
+  const galleryImgs = overlay.querySelectorAll(
+    "#modal-hero-image img, #modal-hero-support img, #modal-process-content img"
+  );
+  galleryImgs.forEach((img, i) => { img.dataset.gidx = i; });
+
   const idx = featuredProjects.findIndex(p => p.id === project.id);
   modalPagination.textContent = idx > -1
     ? `${String(idx + 1).padStart(2, "0")} / ${String(featuredProjects.length).padStart(2, "0")}`
     : "";
+  const projectNav = document.getElementById("modal-project-nav");
+  const prevBtn = document.getElementById("modal-prev-project");
+  const nextBtn = document.getElementById("modal-next-project");
+  if (idx > -1) {
+    projectNav.hidden = false;
+    prevBtn.disabled = idx <= 0;
+    nextBtn.disabled = idx >= featuredProjects.length - 1;
+  } else {
+    projectNav.hidden = true;
+  }
 
   overlay.classList.add("open");
   document.body.style.overflow = "hidden";
@@ -256,27 +407,58 @@ function closeModal() {
 
 document.getElementById("modal-back").addEventListener("click", closeModal);
 
-// ---------------- Lightbox (click any project photo to enlarge) ----------------
+// Prev/next between Featured Projects only (not experience/leadership —
+// those never populate featuredProjects, so idx stays -1 and the nav stays
+// hidden for them; see openModal).
+document.getElementById("modal-prev-project").addEventListener("click", () => {
+  const idx = featuredProjects.findIndex(p => p.id === openProjectId);
+  if (idx > 0) openModal(featuredProjects[idx - 1]);
+});
+document.getElementById("modal-next-project").addEventListener("click", () => {
+  const idx = featuredProjects.findIndex(p => p.id === openProjectId);
+  if (idx > -1 && idx < featuredProjects.length - 1) openModal(featuredProjects[idx + 1]);
+});
+
+// ---------------- Lightbox (click any project photo to enlarge, with
+// caption and prev/next through that project's own photos) ----------------
 const lightbox = document.getElementById("lightbox-overlay");
 const lightboxImg = document.getElementById("lightbox-image");
+const lightboxCaption = document.getElementById("lightbox-caption");
+let lightboxIndex = 0;
 
-document.querySelector(".modal-body").addEventListener("click", e => {
-  const img = e.target.closest("img");
-  if (!img) return;
-  lightboxImg.src = img.src;
-  lightboxImg.alt = img.alt;
+function openLightboxAt(index) {
+  if (!currentGallery.length) return;
+  lightboxIndex = (index + currentGallery.length) % currentGallery.length;
+  const entry = currentGallery[lightboxIndex];
+  lightboxImg.src = entry.src;
+  lightboxImg.alt = entry.caption;
+  lightboxCaption.textContent = entry.caption;
   lightbox.classList.add("open");
-});
-document.getElementById("modal-process-content").addEventListener("click", e => {
-  const img = e.target.closest("img");
+}
+
+function shiftLightbox(delta) {
+  openLightboxAt(lightboxIndex + delta);
+}
+
+function lightboxClickHandler(e) {
+  const img = e.target.closest("img[data-gidx]");
   if (!img) return;
-  lightboxImg.src = img.src;
-  lightboxImg.alt = img.alt;
-  lightbox.classList.add("open");
+  openLightboxAt(parseInt(img.dataset.gidx, 10));
+}
+document.querySelector(".modal-body").addEventListener("click", lightboxClickHandler);
+document.getElementById("modal-process-content").addEventListener("click", lightboxClickHandler);
+
+document.getElementById("lightbox-prev").addEventListener("click", e => { e.stopPropagation(); shiftLightbox(-1); });
+document.getElementById("lightbox-next").addEventListener("click", e => { e.stopPropagation(); shiftLightbox(1); });
+document.getElementById("lightbox-close").addEventListener("click", () => lightbox.classList.remove("open"));
+lightbox.addEventListener("click", e => {
+  if (e.target === lightbox) lightbox.classList.remove("open");
 });
-lightbox.addEventListener("click", () => lightbox.classList.remove("open"));
 document.addEventListener("keydown", e => {
-  if (e.key === "Escape" && lightbox.classList.contains("open")) lightbox.classList.remove("open");
+  if (!lightbox.classList.contains("open")) return;
+  if (e.key === "Escape") lightbox.classList.remove("open");
+  if (e.key === "ArrowLeft") shiftLightbox(-1);
+  if (e.key === "ArrowRight") shiftLightbox(1);
 });
 
 document.querySelectorAll(".card-grid").forEach(grid => {

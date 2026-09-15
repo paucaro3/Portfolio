@@ -27,8 +27,13 @@
                 numbers to publish; real data/plots belong in the images instead
   toolsUsed:    (optional) array of tool names matching the Engineering Toolbox
                 list — renders as small monogram badges in the sidebar
-  dates, teamSize, myRole: (optional) free-text project metadata, not yet
-                surfaced in the UI but kept here for future use
+  dates:        (optional) "Month Year – Month Year" — REQUIRED for this project
+                to appear on the sidebar Timeline at all; parsed for start/end
+                year, so keep that "Month Year – Month Year" shape
+  teamSize, myRole: (optional) free-text project metadata, not yet surfaced
+                in the UI but kept here for future use
+  teamPhoto:    (optional) path to a team photo shown in its own sidebar
+                block ("The Team") — omit if there's no group photo for this one
   tags:         short list of skills/tools shown as pills on the card
   reportUrl:    (optional) link for the "VIEW FULL REPORT" button
   videoUrl:     (optional) link for the "WATCH VIDEO" button
@@ -129,6 +134,7 @@ const PROJECTS = [
     tagline: "Suspension Lead, Team STORM — SDSU Senior Design (ME491), sponsored by Aztec Baja Racing",
     thumb: "https://img.youtube.com/vi/Hz4xkZ26YT0/hqdefault.jpg",
     dates: "August 2024 – May 2025",
+    teamPhoto: "images/engineering/suspension-final-arizona-team.jpg",
     teamSize: "5-person team; suspension lead (not overall team lead)",
     myRole: "Suspension lead",
     problem: "Baja drivers needed adjustable damping to handle rough terrain without sacrificing comfort, plus a tighter turning radius for a better competition score.",
@@ -198,6 +204,7 @@ const PROJECTS = [
     tagline: "Research Project, NanoFAB.SDSU — presented at the SDSU Spring Symposium and the CMEMS Conference at the University of Miami",
     thumb: "images/research/epilepsy-final-concept.jpg",
     dates: "October 2024 – March 2025",
+    teamPhoto: "images/research/epilepsy-final-team-picture.jpg",
     teamSize: "Led a team of 4",
     myRole: "Team lead",
     problem: "Existing VNS therapy for epilepsy is open-loop — it stimulates on a fixed schedule rather than responding to what's happening in the body, limiting how precise or personalized it can be.",
@@ -289,6 +296,7 @@ const PROJECTS = [
     tagline: "Research Project, NanoFAB.SDSU — SDSU Spring Symposium & a U.S.-Mexico border health conference · Undergraduate Research Excellence Award",
     thumb: "images/research/diabetes-final-device.jpg",
     dates: "May 2023 – March 2025",
+    teamPhoto: "images/research/diabetes-final-cleanroom-team.jpg",
     teamSize: "Joined a team of 3 graduate students as an undergrad; later took over as team lead",
     myRole: "Team lead (later stage)",
     problem: "Research shows vagus nerve stimulation can enhance insulin sensitivity, offering a potential complement to insulin therapy. This project designed a flexible, implantable cuff electrode sized to the vagus nerve, with an integrated locking mechanism to hold it in place.",
@@ -357,6 +365,7 @@ const PROJECTS = [
     title: "Effect of SLM Process Parameters on 316L Stainless Steel Density",
     tagline: "WE-BELIEVE Research Program — first research project",
     thumb: "images/engineering/slm-final-printed-cubes.jpg",
+    dates: "June 2021 – August 2021",
     finalImages: [
       "images/engineering/slm-final-printed-cubes.jpg",
       "images/engineering/slm-final-sample-closeup.jpg",
@@ -414,21 +423,54 @@ const PROJECTS = [
     title: "Seahorse-Tail-Inspired Ankle Articulation for 3D-Printed Prosthetics",
     tagline: "3D Printing Prosthetics Group, in collaboration with LIMBER Prosthetics (UCSD)",
     thumb: "images/research/prosthetic-final-cad-hinge.jpg",
+    dates: "September 2022 – December 2022",
     finalImages: [
       "images/research/prosthetic-final-cad-hinge.jpg",
       "images/research/prosthetic-final-printed-joint.jpg",
       "images/research/prosthetic-final-k2-render.jpg",
       "images/research/prosthetic-final-bracket.jpg"
     ],
-    processImages: [
-      "images/research/prosthetic-process-concept-sketch.jpg",
-      "images/research/prosthetic-process-hinge-sketch.jpg",
-      "images/research/prosthetic-process-vertebra-render-1.jpg",
-      "images/research/prosthetic-process-vertebra-render-2.jpg",
-      "images/research/prosthetic-process-joint-assembly.jpg",
-      "images/research/prosthetic-process-design-notes.jpg",
-      "images/research/prosthetic-process-fea-1.jpg",
-      "images/research/prosthetic-process-fea-2.jpg"
+    // Interleaved process content — order, grouping, and wording picked by
+    // Paulette via the clickable slide-picker on the LIMBER Prosthetics deck.
+    process: [
+      { image: "images/research/prosthetic-process-printed-prototype-1.jpg", text: "3D printed prototype" },
+      { image: "images/research/prosthetic-process-printed-prototype-2.jpg", text: "3D printed prototype (link)" },
+      { image: "images/research/prosthetic-process-seahorse-inspiration.png", text: "Seahorse inspired design" },
+      { image: "images/research/prosthetic-process-literature-review.png", text: "Literature review for linkage system" },
+      { images: [
+          "images/research/prosthetic-process-initial-concept-1.jpg",
+          "images/research/prosthetic-process-initial-concept-2.jpg",
+          "images/research/prosthetic-process-initial-concept-3.jpg"
+        ], text: "Initial design concepts" },
+      { images: [
+          "images/research/prosthetic-process-fabrication-idea-1.png",
+          "images/research/prosthetic-process-fabrication-idea-2.png"
+        ], text: "Fabrication/design ideas" },
+      { images: [
+          "images/research/prosthetic-process-movement-idea-1.png",
+          "images/research/prosthetic-process-movement-idea-2.jpg"
+        ], text: "Movement understanding ideas" },
+      { image: "images/research/prosthetic-process-formlabs-printer.png", text: "Formlabs resin printer" },
+      { image: "images/research/prosthetic-process-gantt-chart.png", text: "Gantt chart" },
+      { image: "images/research/prosthetic-process-linkage-concept.png", text: "Linkage concept" },
+      { image: "images/research/prosthetic-process-linkage-dimensions.png", text: "Rough linkage dimensions" },
+      { image: "images/research/prosthetic-process-outer-protection-assembly.png", text: "Outer protection assembly" },
+      { images: [
+          "images/research/prosthetic-process-outer-protection-part-1.png",
+          "images/research/prosthetic-process-outer-protection-part-2.png"
+        ], text: "Outer protection part" },
+      { image: "images/research/prosthetic-process-inner-linkage-assembly.png", text: "Inner linkage assembly" },
+      { image: "images/research/prosthetic-process-inner-base-linkage.png", text: "Inner base linkage part" },
+      { image: "images/research/prosthetic-process-foot-screw-hole.png", text: "Foot with screw hole for assembly" },
+      { images: [
+          "images/research/prosthetic-process-inner-assembly-1.png",
+          "images/research/prosthetic-process-inner-assembly-2.png",
+          "images/research/prosthetic-process-inner-assembly-3.png"
+        ], text: "Inner assembly" },
+      { images: [
+          "images/research/prosthetic-process-full-assembly-1.png",
+          "images/research/prosthetic-process-full-assembly-2.png"
+        ], text: "Full assembly" }
     ],
     tags: ["3D Printing", "Biomimicry", "SOLIDWORKS", "FEA"],
     description: `
@@ -477,6 +519,8 @@ const PROJECTS = [
     title: "Lab Manager & Mask Layout Lead",
     tagline: "SDSU Research Foundation — NanoFAB.SDSU",
     thumb: "images/experience/lab-manager-final-wafer-macro.jpg",
+    dates: "May 2023 – July 2026",
+    teamPhoto: "images/experience/lab-manager-final-team-group.jpg",
     finalImages: [
       "images/experience/lab-manager-final-cleanroom-selfie.jpg",
       "images/experience/lab-manager-final-wafer-macro.jpg",
@@ -528,9 +572,13 @@ const PROJECTS = [
     category: "experience",
     title: "Automated Firmware Relay Validation",
     tagline: "Firmware Engineering Intern — Universal Electronics",
-    thumb: "images/experience/firmware-intern-thumb.jpg",
-    // internship photos are limited — 1 image (or even none) is fine here
-    finalImages: ["images/experience/firmware-intern-thumb.jpg"],
+    thumb: "images/experience/firmware-process-zwave-ctt-results.jpg",
+    dates: "May 2025 – August 2025",
+    finalImages: ["images/experience/firmware-process-zwave-ctt-results.jpg"],
+    process: [
+      { image: "images/experience/firmware-process-terminal-test-log.jpg",
+        text: "Terminal log from the automated relay notification test, confirming detection and a pass" }
+    ],
     tags: ["Python", "Z-Wave", "Zigbee", "Test Automation", "Embedded Firmware"],
     description: `
       <p>Automated relay validation across 20 embedded firmware safety test
@@ -545,8 +593,20 @@ const PROJECTS = [
     category: "experience",
     title: "Automated Hardware Validation & Thermal Study",
     tagline: "Hardware Engineering Intern — Universal Electronics",
-    thumb: "images/experience/hardware-intern-thumb.jpg",
-    finalImages: ["images/experience/hardware-intern-thumb.jpg"],
+    thumb: "images/experience/hardware-final-test-platform.jpg",
+    dates: "May 2024 – August 2024",
+    finalImages: ["images/experience/hardware-final-test-platform.jpg"],
+    process: [
+      { image: "images/experience/hardware-process-control-panel.jpg", text: "Control panel wiring for the test platform" },
+      { image: "images/experience/hardware-process-relay-board.jpg", text: "Relay board mounted for automated power cycling" },
+      { image: "images/experience/hardware-process-electrical-box-vent.jpg", text: "Outlet and vent switch box for the test setup" },
+      { image: "images/experience/hardware-process-wire-connectors.jpg", text: "Wire connectors on the test rig" },
+      { image: "images/experience/hardware-process-digital-counter.jpg", text: "Digital counter tracking test cycles" },
+      { image: "images/experience/hardware-process-pcb-closeup.jpg", text: "Wiring the counter board" },
+      { image: "images/experience/hardware-process-thermal-chamber.jpg", text: "Thermal chamber used for the heat distribution study" },
+      { image: "images/experience/hardware-process-notebook-sketch.jpg", text: "Planning thermocouple placement inside the chamber" },
+      { image: "images/experience/hardware-process-matlab-thermocouple-plot.jpg", text: "Thermocouple locations plotted in MATLAB" }
+    ],
     tags: ["Hardware Testing", "MATLAB", "DAQ", "DOE", "Oscilloscopes"],
     description: `
       <p>Designed and built an automated hardware validation test equipment
@@ -564,6 +624,7 @@ const PROJECTS = [
     title: "Robotics Instructor",
     tagline: "Smart Mind Robotics — La Mesa, CA",
     thumb: "images/experience/robotics-final-spike-bot-poster.jpg",
+    dates: "October 2020 – April 2023",
     finalImages: [
       "images/experience/robotics-final-obstacle-bot.mp4",
       "images/experience/robotics-final-spike-bot.mp4",
@@ -601,14 +662,21 @@ const PROJECTS = [
     title: "High-Power Rocket Build & Launch — LOC IV",
     tagline: "LOC Precision IV airframe, AeroTech 29/54mm DMS motor",
     thumb: "images/engineering/rocket-final-launch-poster.jpg",
+    dates: "June 2025 – August 2025",
+    teamPhoto: "images/engineering/rocket-final-team-group.jpg",
     finalImages: [
       "images/engineering/rocket-final-launch.mp4",
-      "images/engineering/rocket-final-launch-poster.jpg"
-      // EDIT ME: add more photo paths here once saved — e.g. group photo,
-      // rocket on the pad, solo shot against the sky.
+      "images/engineering/rocket-final-solo-standing.jpg",
+      "images/engineering/rocket-final-shoulder-carry.jpg"
     ],
-    processImages: [
-      // EDIT ME: add prep/assembly photo paths here once saved
+    // Interleaved process content — real prep-day photos and video Paulette
+    // shared, paired with the existing build-sequence narrative below.
+    process: [
+      { image: "images/engineering/rocket-process-group-prep.jpg", text: "Prepping the rocket before launch" },
+      { image: "images/engineering/rocket-process-group-prep-back.jpg", text: "Getting the recovery gear ready" },
+      { image: "images/engineering/rocket-process-gear-closeup.jpg", text: "Parachute and shock cord laid out" },
+      { image: "images/engineering/rocket-process-prep-video.mp4", text: "Final prep at the pad" },
+      { image: "images/engineering/rocket-process-launch-stand.jpg", text: "On the launch rail, ready to fly" }
     ],
     tags: ["High-Power Rocketry", "AeroTech DMS Motor", "Recovery Systems"],
     description: `
@@ -641,6 +709,7 @@ const PROJECTS = [
     title: "60cc Don't Email Me — Microcontroller-Driven Syringe Pump",
     tagline: "ME 683: Design of Medical Devices, SDSU",
     thumb: "images/engineering/syringe-final-full-setup.jpg",
+    dates: "February 2026 – March 2026",
     finalImages: [
       "images/engineering/syringe-final-full-setup.jpg",
       "images/engineering/syringe-final-electronics-box.jpg",
@@ -704,6 +773,7 @@ const PROJECTS = [
     title: "Biomedical Engineering Society (BMES)",
     tagline: "Vice President — SDSU",
     thumb: "images/leadership/bmes-final-masimo-group.jpg",
+    dates: "June 2024 – May 2026",
     finalImages: [
       "images/leadership/bmes-final-masimo-group.jpg",
       "images/leadership/bmes-final-tabling-indoor.jpg",
@@ -752,6 +822,7 @@ const PROJECTS = [
     title: "American Society of Mechanical Engineers (ASME)",
     tagline: "President, Treasurer — SDSU",
     thumb: "images/leadership/asme-final-tabling.jpg",
+    dates: "June 2023 – May 2025",
     finalImages: [
       "images/leadership/asme-final-tabling.jpg",
       "images/leadership/asme-final-gbm-group.jpg",

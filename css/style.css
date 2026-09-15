@@ -51,10 +51,11 @@ a { color: inherit; }
 .wordmark {
   font-family: var(--sans);
   font-weight: 700;
-  font-size: 1.15rem;
-  letter-spacing: 0.12em;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
   text-decoration: none;
   color: var(--ink);
+  white-space: nowrap;
 }
 
 .main-nav {
@@ -362,8 +363,8 @@ a { color: inherit; }
 .tool-badge {
   position: absolute;
   transform: translate(-50%, -50%) translateY(8px) scale(0.9);
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -400,7 +401,7 @@ a { color: inherit; }
 .tool-badge-mark {
   font-family: var(--serif);
   font-weight: 700;
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   color: var(--oxblood);
 }
 
@@ -709,6 +710,35 @@ a { color: inherit; }
   color: var(--oxblood);
 }
 
+.modal-project-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.modal-project-arrow {
+  background: none;
+  border: 1px solid var(--card-border);
+  border-radius: 3px;
+  width: 26px;
+  height: 26px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ink);
+  font-size: 0.85rem;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.modal-project-arrow:hover:not(:disabled) {
+  border-color: var(--oxblood);
+  color: var(--oxblood);
+}
+
+.modal-project-arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
 .modal-body {
   padding: 1.25rem 2rem 1rem;
   display: grid;
@@ -939,6 +969,128 @@ a { color: inherit; }
   font-size: 1.1rem;
 }
 
+/* Timeline: where this project sits across the whole career span. The
+   current project's duration is always drawn; every other entry is a
+   quiet tick + start year that reveals its own duration and title on
+   hover/focus, so the strip stays small at rest. */
+.timeline-current-dates {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--oxblood);
+  margin: 0;
+}
+
+.timeline-track {
+  margin-top: 1rem;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 0.3rem;
+}
+
+.tl-row {
+  display: flex;
+  gap: 0.7rem;
+  position: relative;
+  padding-bottom: 1.1rem;
+}
+
+.tl-row:last-child {
+  padding-bottom: 0;
+}
+
+.tl-marker {
+  flex: none;
+  width: 12px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.tl-marker::before {
+  content: "";
+  position: absolute;
+  top: 13px;
+  bottom: -1.1rem;
+  left: 50%;
+  border-left: 2px dashed var(--rule);
+  transform: translateX(-50%);
+}
+
+.tl-row:last-child .tl-marker::before {
+  display: none;
+}
+
+.tl-dot {
+  width: 9px;
+  height: 9px;
+  margin-top: 3px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 2px solid var(--oxblood);
+  flex: none;
+  z-index: 1;
+}
+
+.tl-row.is-current .tl-dot {
+  background: var(--oxblood);
+  width: 11px;
+  height: 11px;
+}
+
+.tl-row.is-education .tl-dot {
+  border-radius: 2px;
+  background: var(--cream-alt);
+  border-color: var(--muted);
+}
+
+.tl-row-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.tl-row-date {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.tl-row-title {
+  font-family: var(--sans);
+  font-size: 0.76rem;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.tl-row.is-current .tl-row-date,
+.tl-row.is-current .tl-row-title {
+  color: var(--oxblood);
+  font-weight: 600;
+}
+
+.tl-row.is-education .tl-row-date,
+.tl-row.is-education .tl-row-title {
+  color: var(--muted);
+}
+
+.sidebar-team-photo {
+  background: #fff;
+  padding: 5px;
+  border: 1px solid var(--card-border);
+}
+
+.sidebar-team-photo img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.94) sepia(0.05) contrast(1.02);
+}
+
 /* Process section: smaller, denser, organized grid — supporting detail below the fold */
 .modal-process {
   margin: 1.5rem 2rem 2.5rem;
@@ -1046,6 +1198,12 @@ a { color: inherit; }
   padding-left: 1rem;
 }
 
+.modal-process-narrative {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+
 .process-row-pair {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
@@ -1114,6 +1272,7 @@ a { color: inherit; }
   display: none;
   align-items: center;
   justify-content: center;
+  gap: 1.5rem;
   padding: 4vh 4vw;
   z-index: 200;
   cursor: zoom-out;
@@ -1123,11 +1282,64 @@ a { color: inherit; }
   display: flex;
 }
 
-.lightbox-overlay img {
+.lightbox-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  max-width: min(84vw, 900px);
+  cursor: default;
+}
+
+.lightbox-content img {
   max-width: 100%;
-  max-height: 92vh;
+  max-height: 78vh;
   object-fit: contain;
   background: #fff;
   padding: 10px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-caption {
+  font-family: var(--hand);
+  font-size: 1.1rem;
+  color: #f1ece1;
+  text-align: center;
+  margin: 0;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background: none;
+  border: none;
+  color: #f1ece1;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.lightbox-nav {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #f1ece1;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.lightbox-nav:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: var(--oxblood);
+}
+
+@media (max-width: 640px) {
+  .lightbox-overlay { gap: 0.6rem; padding: 3vh 2vw; }
+  .lightbox-nav { width: 36px; height: 36px; min-width: 36px; font-size: 1rem; }
 }

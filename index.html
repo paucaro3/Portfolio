@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=25">
 <script>
   // Defined here (not in js/main.js) so it exists before any <img onerror> in the
   // page body can fire — those load during initial HTML parsing, ahead of scripts
@@ -23,7 +23,7 @@
 <body>
 
 <header class="site-header">
-  <a href="#top" class="wordmark">PAULETTE</a>
+  <a href="#top" class="wordmark">PAULETTE SURO</a>
   <nav class="main-nav">
     <a href="#featured">WORK</a>
     <a href="#experience">EXPERIENCE</a>
@@ -40,12 +40,15 @@
     <div class="hero-grid">
       <div class="hero-copy">
         <span class="eyebrow-tag">ENGINEER / RESEARCHER / BUILDER</span>
-        <h1>Turning <em>Ideas</em> Into Impact</h1>
+        <h1>Engineering for <em>People</em></h1>
         <p class="hero-bio">
-          I'm a mechanical/bioengineer interested in electrochemical sensing,
-          MEMS fabrication, and mechanical design — from a master's thesis on
-          glucose-sensing electrodes to hands-on suspension design and
-          hardware testing. This site collects the projects I'm proudest of.
+          I'm an engineer who likes building things that make a real
+          difference for the people using them — medical devices, vehicle
+          systems, hardware, software. Along the way that's meant hands-on
+          experience with electrochemical testing, MEMS fabrication, and
+          mechanical design, but the common thread is caring about the
+          human impact more than any one specialty. This site collects the
+          projects I'm proudest of.
         </p>
         <a href="#featured" class="btn-primary">VIEW MY WORK →</a>
         <p class="hero-margin-note">Collect<br>Build<br>Improve<br>Repeat <span class="margin-star">★</span></p>
@@ -54,7 +57,6 @@
       <div class="hero-photo-frame">
         <div class="binder-clip" aria-hidden="true"></div>
         <img src="images/about-photo.jpg" alt="Paulette Suro" onerror="handleImgError(this)">
-        <p class="photo-caption">Same girl... just building bigger things. —P.S.</p>
       </div>
 
       <div class="hero-sidebar">
@@ -145,7 +147,11 @@
 
     <div class="modal-topbar">
       <button class="modal-back" id="modal-back">← ALL PROJECTS</button>
-      <span class="modal-pagination" id="modal-pagination"></span>
+      <div class="modal-project-nav" id="modal-project-nav">
+        <button class="modal-project-arrow" id="modal-prev-project" aria-label="Previous project">&larr;</button>
+        <span class="modal-pagination" id="modal-pagination"></span>
+        <button class="modal-project-arrow" id="modal-next-project" aria-label="Next project">&rarr;</button>
+      </div>
     </div>
 
     <div class="modal-body">
@@ -181,6 +187,17 @@
           <h4>Tools Used</h4>
           <div class="sidebar-tools" id="modal-tools"></div>
         </div>
+        <div class="sidebar-block" id="sidebar-timeline" hidden>
+          <h4>Timeline</h4>
+          <p class="timeline-current-dates" id="modal-timeline-dates"></p>
+          <div class="sidebar-timeline" id="modal-timeline"></div>
+        </div>
+        <div class="sidebar-block" id="sidebar-team" hidden>
+          <h4>The Team</h4>
+          <div class="sidebar-team-photo">
+            <img id="modal-team-photo" src="" alt="">
+          </div>
+        </div>
         <span class="sidebar-star" aria-hidden="true">★</span>
       </aside>
     </div>
@@ -192,13 +209,20 @@
   </div>
 </div>
 
-<!-- Lightbox: click any project photo to see it full-size -->
+<!-- Lightbox: click any project photo to see it full-size, with caption and
+     prev/next through that project's photos -->
 <div class="lightbox-overlay" id="lightbox-overlay">
-  <img id="lightbox-image" src="" alt="">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous photo">&larr;</button>
+  <div class="lightbox-content">
+    <img id="lightbox-image" src="" alt="">
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
+  <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next photo">&rarr;</button>
 </div>
 
-<script src="js/data.js?v=19"></script>
-<script src="js/toolbox-data.js?v=19"></script>
-<script src="js/main.js?v=19"></script>
+<script src="js/data.js?v=30"></script>
+<script src="js/toolbox-data.js?v=30"></script>
+<script src="js/main.js?v=30"></script>
 </body>
 </html>
