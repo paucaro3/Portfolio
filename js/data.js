@@ -16,6 +16,24 @@
                  under a "Process" heading, in a captioned grid (captions are
                  auto-derived from the filename, e.g. "thesis-process-mask-
                  layout.jpg" -> "Mask Layout")
+  process:      (optional, preferred over processImages) the case study's
+                step-by-step story, in order. Mix any of these:
+                  { image: "path.jpg", text: "Short line beside the photo" }
+                  { images: ["a.jpg", "b.jpg"], text: "..." }   — side-by-side pair
+                  { heading: "Why this matters", text: "A paragraph..." }
+                      — text only, no image: use it to explain what the
+                        next photos show (doesn't take a step number)
+                  { image: "path.jpg", heading: "...", text: "...", wide: true }
+                      — text first, then the photo big underneath it
+                  { heading: "...", text: "...", schedule: [
+                      { term: "Fall 2025", events: [
+                        { date: "Sep 8", type: "GBM", title: "Welcome GBM" }, ...
+                      ] }, ...
+                    ] }
+                      — a "year at a glance" event list, one column per
+                        term; type "Speaker" and "Tour" are highlighted red
+                Any image step can also take a `heading` and/or `caption`
+                (handwritten-style label).
   images:       fallback gallery used only if finalImages isn't set (older entries)
   heroCaption:  (optional) short handwritten-style note under the hero image
   description:      HTML shown under the title (the "what it is / result" summary)
@@ -48,12 +66,12 @@ const PROJECTS = [
     category: "research",
     subjects: ["sensors", "research"],
     title: "Redox Amplification in Glassy Carbon Electrodes for Glucose Sensing through Sweat",
-    tagline: "M.S. Thesis, SDSU Bioengineering — NSF AccelNet: Broadening Carbon Ring",
-    thumb: "images/research/thesis-final-device-isolated.png",
+    tagline: "M.S. Thesis, SDSU Bioengineering · NSF AccelNet: Broadening Carbon Ring",
+    thumb: "images/research/thesis-final-smartwatch-integration.jpg",
     dates: "March 2025 – July 2026",
     teamSize: "Led a 4-person team (3 undergraduate researchers)",
     myRole: "Primary designer, fabricator, and tester",
-    problem: "Sweat glucose runs far lower than blood glucose, so a sensor needs to amplify the redox signal just to make it detectable — and today's continuous monitors are still minimally invasive at best.",
+    problem: "Sweat glucose runs far lower than blood glucose, so a sensor needs to amplify the redox signal just to make it detectable, and today's continuous monitors are still minimally invasive at best.",
     role: "Led a 4-person team as primary designer, fabricator, and tester of the sensor, from concept through characterization.",
     keyResults: [
       "Stable, repeatable CV/EIS behavior across scan rates",
@@ -63,10 +81,9 @@ const PROJECTS = [
     toolsUsed: ["SolidWorks", "CoventorWare", "COMSOL", "Gamry Analyst", "Python"],
     heroCaption: "Small sensors. Big possibilities.",
     finalImages: [
+      "images/research/thesis-final-smartwatch-integration.jpg",
       "images/research/thesis-final-device-isolated.png",
       "images/research/thesis-process-design-iteration.png"
-      // EDIT ME: add the "Seamless Integration" smartwatch concept graphic
-      // once saved — pasted in chat, not yet a file I can copy
     ],
     // Interleaved process content — each step is an image (or paired images)
     // beside its own short line, in the order and wording Paulette picked
@@ -88,8 +105,8 @@ const PROJECTS = [
       { image: "images/research/thesis-results-cv-2000rpm.jpg", text: "CV response across scan rates at 2000 rpm" },
       { image: "images/research/thesis-results-cv-comparison.jpg", text: "2000 vs. 3000 rpm, side by side." },
       { image: "images/research/thesis-results-randles-sevcik.jpg", text: "Randles-Ševčík analysis confirming the reaction is diffusion-controlled." },
-      { image: "images/research/thesis-results-eis-2000rpm.jpg", text: "Impedance spectroscopy at 2000 rpm — Nyquist and Bode." },
-      { image: "images/research/thesis-results-eis-3000rpm.jpg", text: "Impedance spectroscopy at 3000 rpm — Nyquist and Bode." },
+      { image: "images/research/thesis-results-eis-2000rpm.jpg", text: "Impedance spectroscopy at 2000 rpm: Nyquist and Bode." },
+      { image: "images/research/thesis-results-eis-3000rpm.jpg", text: "Impedance spectroscopy at 3000 rpm: Nyquist and Bode." },
       { image: "images/research/thesis-process-microfluidic-render.png", text: "Microfluidic testing housing" }
     ],
     tags: ["MEMS Fabrication", "Electrochemistry (CV/EIS)", "COMSOL / FEA", "SOLIDWORKS", "CoventorWare", "Gamry Analyst", "Python"],
@@ -98,25 +115,25 @@ const PROJECTS = [
       glassy carbon electrode geometry, built for non-invasive glucose
       sensing through sweat. Sweat glucose runs far lower than blood
       glucose, so the electrode geometry itself has to amplify the redox
-      signal to make it detectable — current continuous monitors remain
+      signal to make it detectable. Current continuous monitors remain
       minimally invasive at best.</p>
       <p>Designed around a wearable form factor (clipping onto a smartwatch
-      band) to make continuous monitoring more comfortable and accessible —
+      band) to make continuous monitoring more comfortable and accessible,
       especially for prediabetes management and pediatric diabetes care,
       where less-invasive daily monitoring matters most.</p>
     `,
     processDescription: `
       <p>Iterated the radial electrode geometry (width, layout, thickness)
       across multiple batches to balance performance, fabrication
-      reliability, and mechanical robustness — modeled in SOLIDWORKS, masks
-      drafted in CoventorWare, early data analysis in Python.</p>
+      reliability, and mechanical robustness. Modeled in SOLIDWORKS, drafted masks
+      in CoventorWare, and ran early data analysis in Python.</p>
       <p>Fabricated via C-MEMS: SU-8 photolithography pyrolyzed into glassy
       carbon (biocompatible, conductive), polyimide insulation (a flexible
       MEMS material), a metal trace layer, a second polyimide layer, and a
       BHF bath to release devices from the wafer.</p>
       <p>Characterized with optical microscopy, CV/EIS on a Gamry Analyst,
-      and COMSOL modeling of electrode-thickness effects — see the plots
-      below for the scan-rate and concentration results.</p>
+      and COMSOL modeling of electrode-thickness effects (see the plots
+      below for the scan-rate and concentration results).</p>
       <p><em>Outcome:</em> optimized the electrode geometry, fabrication
       process, and test criteria for the platform. Functionalizing with
       glucose oxidase for a fully wearable device is the next step.</p>
@@ -131,14 +148,14 @@ const PROJECTS = [
     category: "engineering",
     subjects: ["mechanics", "fabrication"],
     title: "Semi-Active Long Travel Suspension for Off-Road Racing",
-    tagline: "Suspension Lead, Team STORM — SDSU Senior Design (ME491), sponsored by Aztec Baja Racing",
+    tagline: "Suspension Lead, Team STORM, SDSU Senior Design (ME491), sponsored by Aztec Baja Racing",
     thumb: "https://img.youtube.com/vi/Hz4xkZ26YT0/hqdefault.jpg",
     dates: "August 2024 – May 2025",
     teamPhoto: "images/engineering/suspension-final-arizona-team.jpg",
     teamSize: "5-person team; suspension lead (not overall team lead)",
     myRole: "Suspension lead",
     problem: "Baja drivers needed adjustable damping to handle rough terrain without sacrificing comfort, plus a tighter turning radius for a better competition score.",
-    role: "Suspension lead on a 5-person team — designed, machined, and integrated the front suspension system, and presented the suspension subsystem at competition (the team lead, who held a chief role in the club, presented the overall car).",
+    role: "Suspension lead on a 5-person team: designed, machined, and integrated the front suspension system, and presented the suspension subsystem at competition (the team lead, who held a chief role in the club, presented the overall car).",
     keyResults: [
       "Cut turning radius 15.8% (133 in → 112 in), beating the 10% target",
       "10 in. of vertical wheel travel at 14.7 lb total system weight",
@@ -177,9 +194,9 @@ const PROJECTS = [
     ],
     tags: ["SOLIDWORKS", "FEA", "Arduino", "Manufacturing", "Testing & Validation"],
     description: `
-      <p>Baja team drivers needed a way to adjust damping in real time —
+      <p>Baja team drivers needed a way to adjust damping in real time,
       preventing the car from bottoming out on rough terrain while staying
-      comfortable on smoother sections — plus a tighter turning radius for a
+      comfortable on smoother sections, plus a tighter turning radius for a
       better competition score. As suspension lead on a 5-person team, I
       designed, machined, and integrated a double-wishbone front suspension
       with a driver-selectable 2-position damper, controlled via steering
@@ -200,14 +217,14 @@ const PROJECTS = [
     id: "bioelectronic-epilepsy",
     category: "research",
     subjects: ["devices", "research"],
-    title: "BioAura — Bioelectronic Device for Epileptic Seizure Management",
-    tagline: "Research Project, NanoFAB.SDSU — presented at the SDSU Spring Symposium and the CMEMS Conference at the University of Miami",
+    title: "BioAura: Bioelectronic Device for Epileptic Seizure Management",
+    tagline: "Research Project, NanoFAB.SDSU. Presented at the SDSU Spring Symposium and the CMEMS Conference at the University of Miami",
     thumb: "images/research/epilepsy-final-concept.jpg",
     dates: "October 2024 – March 2025",
     teamPhoto: "images/research/epilepsy-final-team-picture.jpg",
     teamSize: "Led a team of 4",
     myRole: "Team lead",
-    problem: "Existing VNS therapy for epilepsy is open-loop — it stimulates on a fixed schedule rather than responding to what's happening in the body, limiting how precise or personalized it can be.",
+    problem: "Existing VNS therapy for epilepsy is open-loop: it stimulates on a fixed schedule rather than responding to what's happening in the body, limiting how precise or personalized it can be.",
     role: "Led a 4-person team from concept through design, FEA, and fabrication.",
     keyResults: [
       "Completed the 4-layer C-MEMS fabrication process for the cuff electrode",
@@ -252,18 +269,18 @@ const PROJECTS = [
     tags: ["MEMS Fabrication", "Neurostimulation", "FEA (ANSYS)", "Closed-Loop Systems"],
     description: `
       <p>Vagus nerve stimulation (VNS) is a proven therapy for reducing
-      seizure frequency in epilepsy, but existing VNS devices are open-loop —
+      seizure frequency in epilepsy, but existing VNS devices are open-loop:
       they stimulate on a fixed schedule rather than responding to what's
       actually happening in the body. BioAura is a concept for a closed-loop
       alternative: a flexible, implantable cuff electrode that wraps around
       the vagus nerve, senses glutamate and lactate (both linked to seizure
       onset) using glassy carbon electrodes, and triggers targeted
-      stimulation in response — aiming for more precise, personalized
+      stimulation in response, aiming for more precise, personalized
       seizure management than a fixed schedule allows.</p>
       <p>Final design: a 4-electrode (900 µm diameter) cuff sized to the
       vagus nerve's actual anatomy (2.0-3.5 mm diameter, 6.3-11 mm
       circumference, cuffed 1-2 cm below the skin in the neck), refined
-      across 3 design iterations to improve implantability and strength —
+      across 3 design iterations to improve implantability and strength,
       including replacing bulky bump pads with an insulating flap that eases
       implantation and speeds recovery, and rounding edges for strength and
       comfort.</p>
@@ -293,7 +310,7 @@ const PROJECTS = [
     category: "research",
     subjects: ["devices", "research"],
     title: "MEMS Cuff Electrode for Vagus Nerve Stimulation in Diabetes Management",
-    tagline: "Research Project, NanoFAB.SDSU — SDSU Spring Symposium & a U.S.-Mexico border health conference · Undergraduate Research Excellence Award",
+    tagline: "Research Project, NanoFAB.SDSU · SDSU Spring Symposium & a U.S.-Mexico border health conference · Undergraduate Research Excellence Award",
     thumb: "images/research/diabetes-final-device.jpg",
     dates: "May 2023 – March 2025",
     teamPhoto: "images/research/diabetes-final-cleanroom-team.jpg",
@@ -335,7 +352,7 @@ const PROJECTS = [
     tags: ["MEMS Fabrication", "Vagus Nerve Stimulation", "EIS / CV Characterization", "In Vivo Testing"],
     description: `
       <p>Diabetes affects roughly 537 million adults worldwide, and current
-      management — lifestyle changes, glucose monitoring, insulin therapy —
+      management (lifestyle changes, glucose monitoring, insulin therapy)
       is often invasive and expensive (insulin alone runs $175-$300 per vial
       in the US, with patients typically needing 2-3 vials a month).
       Research shows vagus nerve stimulation (VNS) can enhance insulin
@@ -347,7 +364,7 @@ const PROJECTS = [
       <p>The design evolved from early hand-drawn concepts through two
       refined variants (3-electrode and 4-electrode versions) to a final
       design that was fabricated, electrochemically characterized, and
-      tested in an initial in vivo mouse implantation — a step further than
+      tested in an initial in vivo mouse implantation, a step further than
       most of my other bioelectronics work, which stopped at bench
       characterization.</p>
       <p>Presented this work with several different collaborator teams,
@@ -363,7 +380,7 @@ const PROJECTS = [
     category: "research",
     subjects: ["fabrication", "research"],
     title: "Effect of SLM Process Parameters on 316L Stainless Steel Density",
-    tagline: "WE-BELIEVE Research Program — first research project",
+    tagline: "WE-BELIEVE Research Program · first research project",
     thumb: "images/engineering/slm-final-printed-cubes.jpg",
     dates: "June 2021 – August 2021",
     finalImages: [
@@ -372,47 +389,43 @@ const PROJECTS = [
       "images/engineering/slm-final-sample-comparison.jpg",
       "images/engineering/slm-final-pore-analysis.jpg"
     ],
-    processImages: [
-      "images/engineering/slm-process-taguchi-array.jpg",
-      "images/engineering/slm-process-density-setup.jpg",
-      "images/engineering/slm-process-grinder.jpg",
-      "images/engineering/slm-process-sample-prep.jpg",
-      "images/engineering/slm-process-team-polishing.jpg",
-      "images/engineering/slm-process-means-plot.jpg",
-      "images/engineering/slm-process-sn-plot.jpg",
-      "images/engineering/slm-process-lv-density-plot.jpg"
+    // slm-process-density-setup.jpg is a duplicate of the means plot, so it's
+    // left out until the real setup photo replaces it.
+    process: [
+      { heading: "Designing the experiment",
+        text: "Instead of printing every combination, a Taguchi L25 orthogonal array covered 3 factors (scan speed, layer thickness, spot size) at 5 levels each in just 25 print runs." },
+      { image: "images/engineering/slm-process-taguchi-array.jpg", text: "The L25 orthogonal array: 25 runs covering every factor level" },
+      { heading: "Preparing the samples",
+        text: "Prepped each of the 25 samples by grinding and polishing on a Struers grinder, then chemically etched them to reveal the microstructure before imaging under an optical/SEM microscope. Measured porosity from those micrographs in ImageJ (thresholding and particle analysis to isolate pores), then cross-checked against the Archimedes density measurements." },
+      { images: ["images/engineering/slm-process-grinder.jpg", "images/engineering/slm-process-team-polishing.jpg"],
+        text: "Grinding and polishing the samples" },
+      { image: "images/engineering/slm-process-sample-prep.jpg", text: "Chemically etching a sample to reveal its microstructure" },
+      { heading: "Analyzing the results",
+        text: "Analyzed the DoE results with main-effects plots for means and for signal-to-noise ratios, which identified scan speed as the most influential factor on density, with layer thickness and spot size playing smaller roles." },
+      { images: ["images/engineering/slm-process-means-plot.jpg", "images/engineering/slm-process-sn-plot.jpg"],
+        text: "Main effects for means and signal-to-noise ratios. Scan speed has the steepest slope", wide: true },
+      { image: "images/engineering/slm-process-lv-density-plot.jpg", wide: true,
+        text: "Energy density (L/V) vs. relative density. Above a threshold, density plateaus near its maximum" }
     ],
     tags: ["Design of Experiments (DoE)", "Selective Laser Melting", "Materials Characterization", "Minitab"],
     description: `
       <p>My first research project: studying how selective laser melting
       (SLM) 3D printing parameters affect the final density of 316L
-      stainless steel parts — density drives mechanical strength, so
+      stainless steel parts. Density drives mechanical strength, so
       predicting it from printer settings before printing is valuable for
       process planning. Working with Dionicio Riego under Dr. Torresani, I
-      designed a Taguchi Design of Experiments (DoE) — 3 factors (scan
-      speed, layer thickness, spot size) at 5 levels each, an L25(5³)
-      orthogonal array — to map each parameter's effect on density in just
+      designed a Taguchi Design of Experiments (DoE), with 3 factors (scan
+      speed, layer thickness, spot size) at 5 levels each (an L25(5³)
+      orthogonal array), to map each parameter's effect on density in just
       25 print runs instead of testing every combination.</p>
       <p>Printed all 25 specimens on a Xact Metal laser printer (fixed laser
       power 120W, hatch spacing 50 microns), then measured density using
       Archimedes' principle (buoyant mass in a fluid) after polishing and
       chemically etching each sample. Measured relative densities ranging
       from about 82% up to 92.5%, and identified a clear threshold in energy
-      density (the L/V ratio — laser power over scan velocity) above which
+      density (the L/V ratio, laser power over scan velocity) above which
       density plateaued near its maximum, giving a practical target for
       future print settings.</p>
-    `,
-    processDescription: `
-      <p>Prepped each of the 25 samples by grinding and polishing on a
-      Struers grinder, then chemically etched them to reveal the
-      microstructure before imaging under an optical/SEM microscope.
-      Measured porosity from those micrographs in ImageJ (thresholding and
-      particle analysis to isolate pores), then cross-checked against the
-      Archimedes density measurements.</p>
-      <p>Analyzed the DoE results with main-effects plots for means and for
-      signal-to-noise ratios, which identified scan speed as the most
-      influential factor on density, with layer thickness and spot size
-      playing smaller roles.</p>
     `,
     links: []
   },
@@ -477,17 +490,17 @@ const PROJECTS = [
       <p>LIMBER Prosthetics, a 3D-printing startup out of UCSD, prints
       below-the-knee prosthetics from a 3D scan of the residual limb at
       under a tenth of the cost of traditional devices (which can run up to
-      $20,000) — but like most affordable printed prosthetics, its designs
+      $20,000). But like most affordable printed prosthetics, its designs
       have no ankle movement, which makes stairs, hills, and uneven ground
       difficult. My team set out to add articulation back in without adding
       cost, electronics, or hydraulics.</p>
       <p>We looked to biomimicry for the answer: a seahorse's tail is square
       in cross-section rather than cylindrical, which is why it can bend and
-      grip while resisting crushing and torsion — a square prototype in the
+      grip while resisting crushing and torsion. A square prototype in the
       reference literature returned to its original shape after deformation,
       while a cylindrical one stayed bent. We adapted that segmented,
-      square-prism plate structure — connected via the seahorse tail's own
-      mix of gliding, peg-and-socket, and ball-and-socket joints — into a
+      square-prism plate structure (connected via the seahorse tail's own
+      mix of gliding, peg-and-socket, and ball-and-socket joints) into a
       3D-printed hinge linking the printed leg to the foot, giving passive
       ankle articulation with no added hardware.</p>
     `,
@@ -495,7 +508,7 @@ const PROJECTS = [
       <p>Iterated from early hand-drawn concepts through CAD modeling in
       SOLIDWORKS to a final printed and assembled prototype. The first print
       run's connecting rod was toleranced -0.2 in from baseline and fit too
-      loosely; a tighter -0.1 in reprint didn't fit at all — landing on
+      loosely; a tighter -0.1 in reprint didn't fit at all, so we landed on
       -0.15 in as the corrected tolerance for a secure fit, along with
       follow-up fixes to how the hinge attachment holes and spring-retention
       features were positioned.</p>
@@ -517,7 +530,7 @@ const PROJECTS = [
     id: "lab-manager",
     category: "experience",
     title: "Lab Manager & Mask Layout Lead",
-    tagline: "SDSU Research Foundation — NanoFAB.SDSU",
+    tagline: "SDSU Research Foundation, NanoFAB.SDSU",
     thumb: "images/experience/lab-manager-final-wafer-macro.jpg",
     dates: "May 2023 – July 2026",
     teamPhoto: "images/experience/lab-manager-final-team-group.jpg",
@@ -527,43 +540,39 @@ const PROJECTS = [
       "images/experience/lab-manager-final-lab-tour.jpg",
       "images/experience/lab-manager-final-team-group.jpg"
     ],
-    processImages: [
-      "images/experience/lab-manager-process-wafer-macro-1.jpg",
-      "images/experience/lab-manager-process-wafer-macro-2.jpg",
-      "images/experience/lab-manager-process-wafer-macro-3.jpg",
-      "images/experience/lab-manager-process-wafer-batch.jpg",
-      "images/experience/lab-manager-process-mrs-conference.jpg",
-      "images/experience/lab-manager-process-symposium.jpg",
-      "images/experience/lab-manager-process-reception.jpg",
-      "images/experience/lab-manager-process-team-dinner.jpg"
+    process: [
+      { heading: "Mask layouts, wafer by wafer",
+        text: "Each semester, every researcher's electrode, insulation, and metal layers were combined into four final layers on a shared 4-inch wafer, with each design fit to a quarter or half wafer." },
+      { image: "images/experience/lab-manager-process-wafer-batch.jpg", text: "A semester's quarter-wafer designs" },
+      { images: [
+          "images/experience/lab-manager-process-wafer-macro-1.jpg",
+          "images/experience/lab-manager-process-wafer-macro-2.jpg",
+          "images/experience/lab-manager-process-wafer-macro-3.jpg"
+        ], text: "Up close under the cleanroom's yellow light", wide: true },
+      { heading: "Training new researchers",
+        text: "Co-managed cleanroom training with two other lab managers using a shadow → practice → exam pipeline: new researchers shadowed a fabrication process twice, practiced it twice with support, then passed both a hands-on practical and a written exam before working independently." },
+      { heading: "Design meetings and research culture",
+        text: "Ran weekly design meetings supporting multiple concurrent researcher projects per semester, helping each team scope a starting layout, feature sizes, and wafer constraints. Also presented my own research at the SDSU Student Research Symposium (S3), part of the broader NanoFAB research culture this role supported." },
+      { image: "images/experience/lab-manager-process-symposium.jpg", text: "2025 Engineering Graduate Research Symposium" },
+      { image: "images/experience/lab-manager-process-mrs-conference.jpg", text: "At the Materials Research Society (MRS) conference" },
+      { images: ["images/experience/lab-manager-process-reception.jpg", "images/experience/lab-manager-process-team-dinner.jpg"],
+        text: "Celebrating with the team" }
     ],
     tags: ["Mask Layout", "MEMS Fabrication", "Cleanroom Processing", "Process Improvement", "SOPs"],
     description: `
       <p>Compiled researchers' individual device designs into complete,
-      fabrication-ready mask layouts each semester — combining every
+      fabrication-ready mask layouts each semester, combining every
       project's electrode, insulation, and metal layers into four final
       layers on a shared 4-inch wafer (each design fit to a quarter or half
       wafer), then handing off GDS files to an external mask vendor for
       fabrication. Conducted design reviews throughout the process to
       reduce fabrication rework and accelerate project timelines.</p>
       <p>Wrote the lab's Standard Operating Procedure for the Layout Person
-      role — covering CoventorWare training, layer naming and labeling
+      role, covering CoventorWare training, layer naming and labeling
       conventions, file organization by semester and order number, and a
-      layout verification checklist — turning what had been tribal
+      layout verification checklist. This turned what had been tribal
       knowledge into documentation the next layout lead could actually
       follow.</p>
-    `,
-    processDescription: `
-      <p>Co-managed cleanroom training with two other lab managers using a
-      shadow → practice → exam pipeline: new researchers shadowed a
-      fabrication process twice, practiced it twice with support, then
-      passed both a hands-on practical and a written exam before working
-      independently.</p>
-      <p>Ran weekly design meetings supporting multiple concurrent
-      researcher projects per semester, helping each team scope a starting
-      layout, feature sizes, and wafer constraints. Also presented my own
-      research at the SDSU Student Research Symposium (S3), part of the
-      broader NanoFAB research culture this role supported.</p>
     `,
     links: []
   },
@@ -571,20 +580,36 @@ const PROJECTS = [
     id: "firmware-intern",
     category: "experience",
     title: "Automated Firmware Relay Validation",
-    tagline: "Firmware Engineering Intern — Universal Electronics",
+    tagline: "Firmware Engineering Intern, Universal Electronics",
     thumb: "images/experience/firmware-process-zwave-ctt-results.jpg",
     dates: "May 2025 – August 2025",
+    problem: "A smart thermostat's safety mitigation tests had to be run by hand on two different PCB boards, and each board talks over a different RF protocol.",
+    role: "Automated the full mitigation test suite for both boards: one through the Z-Wave Compliance Test Tool, the other with Python over Zigbee.",
+    keyResults: [
+      "20 safety test sequences fully automated",
+      "Both boards report their own pass/fail results",
+      "Saved an hour of manual testing per run"
+    ],
     finalImages: ["images/experience/firmware-process-zwave-ctt-results.jpg"],
     process: [
-      { image: "images/experience/firmware-process-terminal-test-log.jpg",
-        text: "Terminal log from the automated relay notification test, confirming detection and a pass" }
+      { heading: "What the tests check",
+        text: "The thermostat's firmware has several safety features for when something goes wrong, some of them staged across multiple steps. Every one of those had to be verified on two different PCB boards." },
+      { heading: "Two boards, two protocols",
+        text: "The two boards communicate over different RF signals, Z-Wave and Zigbee, so each one needed its own automation. I built the Z-Wave version in the Z-Wave Compliance Test Tool (CTT), where each test step is sent, checked, and logged as a pass, and the Zigbee version in Python." },
+      { image: "images/experience/firmware-process-terminal-test-log.jpg", wide: true,
+        text: "The Python version stepping through a test: sending commands, waiting for reports, and counting the relay notifications that come back before reporting a pass" },
+      { heading: "The result",
+        text: "Both versions run fully automated and report their own results, making the tests repeatable across both hardware platforms and saving an hour of manual testing per run." }
     ],
-    tags: ["Python", "Z-Wave", "Zigbee", "Test Automation", "Embedded Firmware"],
+    tags: ["Python", "Z-Wave CTT", "Zigbee", "Test Automation", "Embedded Firmware"],
     description: `
-      <p>Automated relay validation across 20 embedded firmware safety test
-      sequences using Python, Z-Wave, and Zigbee — improving test
-      repeatability across multiple hardware platforms and reducing manual
-      testing time by an hour per run.</p>
+      <p>Automated the firmware mitigation tests for a smart thermostat's
+      safety features across two different PCB boards. Because the boards use different RF
+      protocols, I automated one through the Z-Wave Compliance Test Tool and
+      the other with Python over Zigbee.</p>
+      <p>Both run fully automated and report their own results, covering 20
+      safety test sequences, improving repeatability across hardware
+      platforms, and cutting manual testing time by an hour per run.</p>
     `,
     links: []
   },
@@ -592,29 +617,53 @@ const PROJECTS = [
     id: "hardware-intern",
     category: "experience",
     title: "Automated Hardware Validation & Thermal Study",
-    tagline: "Hardware Engineering Intern — Universal Electronics",
+    tagline: "Hardware Engineering Intern, Universal Electronics",
     thumb: "images/experience/hardware-final-test-platform.jpg",
     dates: "May 2024 – August 2024",
+    problem: "Thermostats have to recover on their own from blackouts, brownouts, and voltage swings, and the hardware team needed a way to test that reliably over the long term.",
+    role: "Designed and built the test platform, wrote and verified its control scripts, and documented the new power-supply software in an SOP. Also installed humidity control for the test chamber.",
+    keyResults: [
+      "Power wall still in use at the site today",
+      "One set of scripts works across thermostat voltage ratings",
+      "SOP lets the team run tests on their own"
+    ],
     finalImages: ["images/experience/hardware-final-test-platform.jpg"],
     process: [
-      { image: "images/experience/hardware-process-control-panel.jpg", text: "Control panel wiring for the test platform" },
-      { image: "images/experience/hardware-process-relay-board.jpg", text: "Relay board mounted for automated power cycling" },
-      { image: "images/experience/hardware-process-electrical-box-vent.jpg", text: "Outlet and vent switch box for the test setup" },
-      { image: "images/experience/hardware-process-wire-connectors.jpg", text: "Wire connectors on the test rig" },
-      { image: "images/experience/hardware-process-digital-counter.jpg", text: "Digital counter tracking test cycles" },
-      { image: "images/experience/hardware-process-pcb-closeup.jpg", text: "Wiring the counter board" },
-      { image: "images/experience/hardware-process-thermal-chamber.jpg", text: "Thermal chamber used for the heat distribution study" },
-      { image: "images/experience/hardware-process-notebook-sketch.jpg", text: "Planning thermocouple placement inside the chamber" },
-      { image: "images/experience/hardware-process-matlab-thermocouple-plot.jpg", text: "Thermocouple locations plotted in MATLAB" }
+      { heading: "Why reboot reliability matters",
+        text: "Thermostats have to come back on by themselves after blackouts, brownouts, and other voltage changes. The hardware team needed long-term reboot reliability data on their devices, so I designed and built a test platform, the power wall, to run those tests automatically." },
+      { image: "images/experience/hardware-process-relay-board.jpg", text: "Routing each thermostat's wire connectors back to the power supply" },
+      { images: ["images/experience/hardware-process-electrical-box-vent.jpg", "images/experience/hardware-process-wire-connectors.jpg"],
+        text: "Outlet box and wire connectors routing power across the wall" },
+      { heading: "Writing the test scripts",
+        text: "Each control script sets a voltage for a set amount of time. I wrote a full suite: brownout tests at 24V and 30V; a random on/off voltage variation test; on/off tests that cycle 1 s off and 0.1 s on, or 15 s on and 0.05 s off, while stepping up the voltage; and input voltage variation tests using sine and square waves on 12 s ramps, plus one that combines both." },
+      { heading: "Making it reusable",
+        text: "No one had used the new power-supply software before, so I worked out its limits, like a 100-step maximum per script and how to connect to different power supplies to run different tests at the same time. I built every script around a nominal voltage: the team enters the highest voltage a thermostat can take, and each step is a percentage of it, so one script works for thermostats with different voltage ratings. I used an oscilloscope to verify that the supply delivered the right voltages with the right timing, and that the nominal scaling held at any voltage." },
+      { images: ["images/experience/hardware-process-digital-counter.jpg", "images/experience/hardware-process-pcb-closeup.jpg"],
+        text: "A live voltage display at the top of the wall, so anyone can follow reboot behavior just by looking at it" },
+      { heading: "Handing it off",
+        text: "By the end of the project, the team could run scripts on the new power supply on their own, using an SOP I wrote for the new software. The power wall is still in use at the site today." },
+      { heading: "Thermal chamber study",
+        text: "To calibrate the team's temperature sensors, we needed to know each one's offset inside the chamber, but the sensors read too far apart from each other to calibrate accurately. I tracked the thermistors with a DataQ data acquisition system to check for uneven heating inside the chamber." },
+      { image: "images/experience/hardware-process-thermal-chamber.jpg", text: "The thermal chamber" },
+      { image: "images/experience/hardware-process-notebook-sketch.jpg", text: "Planning sensor placement inside the chamber" },
+      { image: "images/experience/hardware-process-matlab-thermocouple-plot.jpg", text: "Sensor locations inside the chamber, plotted in MATLAB" },
+      { heading: "What I recommended",
+        text: "Applying thermodynamics principles, I experimented with building enclosures to hold the thermostats and give them a more controlled environment inside the chamber, aiming to bring the readings closer together. But a longer soak time was the only change that made a reliable difference. I recommended the soak-time adjustment and left it to the managers to weigh whether the extra time and resources were worth it. Along the way, the team got a much clearer picture of how their tools behave." },
+      { heading: "Adding humidity control to the chamber",
+        text: "In a separate project, I set up humidity control for the chamber in house, since having someone else install it would have cost more. I installed the relays and did the wiring, plumbed in a filter, water container, and tubing, and contacted the manufacturer directly with questions that came up during installation." },
+      { image: "images/experience/hardware-process-control-panel.jpg", text: "Relays and wiring I installed in the chamber's control panel" }
     ],
-    tags: ["Hardware Testing", "MATLAB", "DAQ", "DOE", "Oscilloscopes"],
+    tags: ["Hardware Testing", "Power Supply Scripting", "Oscilloscopes", "DAQ", "MATLAB", "DOE"],
     description: `
-      <p>Designed and built an automated hardware validation test equipment
-      platform to evaluate thermostat reboot reliability under fluctuating
-      voltage, using oscilloscopes and control scripts.</p>
-      <p>Ran a thermal distribution study (thermistors, MATLAB, DAQ) that
-      identified uneven heat distribution and proposed soak-time adjustments
-      (DOE).</p>
+      <p>Designed and built an automated hardware validation platform, the
+      power wall, to test thermostat reboot reliability through blackouts,
+      brownouts, and fluctuating voltage, using programmable power-supply
+      scripts verified on an oscilloscope. It's still in use at the site
+      today.</p>
+      <p>Also ran a thermal distribution study (thermistors, DataQ, MATLAB)
+      that found uneven heating inside the test chamber and recommended a
+      longer soak time (DOE), and installed humidity control for the
+      chamber: relays, wiring, filter, water container, and tubing.</p>
     `,
     links: []
   },
@@ -622,7 +671,7 @@ const PROJECTS = [
     id: "robotics-instructor",
     category: "experience",
     title: "Robotics Instructor",
-    tagline: "Smart Mind Robotics — La Mesa, CA",
+    tagline: "Smart Mind Robotics, La Mesa, CA",
     thumb: "images/experience/robotics-final-spike-bot-poster.jpg",
     dates: "October 2020 – April 2023",
     finalImages: [
@@ -630,26 +679,21 @@ const PROJECTS = [
       "images/experience/robotics-final-spike-bot.mp4",
       "images/experience/robotics-final-wedo-car.jpg"
     ],
-    processImages: [
-      "images/experience/robotics-process-motor-closeup.jpg",
-      "images/experience/robotics-process-bin-organization-1.jpg",
-      "images/experience/robotics-process-bin-organization-2.jpg"
+    process: [
+      { image: "images/experience/robotics-process-motor-closeup.jpg", text: "Up close on a student's motorized build" },
+      { heading: "Keeping thousands of pieces findable",
+        text: "Also maintained the classroom's build-kit inventory: with thousands of loose Technic pieces across dozens of class kits, I set up a \"sort by color\" bin system so students could actually find the part they needed mid-build instead of losing lesson time digging through mixed bins." },
+      { images: ["images/experience/robotics-process-bin-organization-1.jpg", "images/experience/robotics-process-bin-organization-2.jpg"],
+        text: "The sort-by-color bins" }
     ],
     tags: ["Teaching", "STEM Education", "LEGO Robotics"],
     description: `
       <p>Taught robotics principles and programming to students in grades
       3-8, adapting lessons across a wide range of learning styles and
-      levels using LEGO WeDo and Spike Prime kits — students built and
+      levels using LEGO WeDo and Spike Prime kits. Students built and
       programmed their own motorized robots, from simple wheeled cars to
       more complex sensor-driven builds, and drove them through
       obstacle-course activities in class.</p>
-    `,
-    processDescription: `
-      <p>Also maintained the classroom's build-kit inventory: with
-      thousands of loose Technic pieces across dozens of class kits, I set
-      up a "sort by color" bin system so students could actually find the
-      part they needed mid-build instead of losing lesson time digging
-      through mixed bins.</p>
     `,
     links: []
   },
@@ -659,7 +703,7 @@ const PROJECTS = [
     id: "rocket",
     category: "engineering",
     subjects: ["mechanics", "fabrication"],
-    title: "High-Power Rocket Build & Launch — LOC IV",
+    title: "High-Power Rocket Build & Launch: LOC IV",
     tagline: "LOC Precision IV airframe, AeroTech 29/54mm DMS motor",
     thumb: "images/engineering/rocket-final-launch-poster.jpg",
     dates: "June 2025 – August 2025",
@@ -683,7 +727,7 @@ const PROJECTS = [
       <p>Built and launched a high-power rocket: a LOC Precision "IV"
       airframe (23 in. slotted booster, 11 in. payload bay, 38mm motor
       mount, 3 fins, 36 in. parachute recovery on 15 ft of nylon shock cord)
-      flown on an AeroTech 29/54mm DMS motor — a certified-flyer-class
+      flown on an AeroTech 29/54mm DMS motor, a certified-flyer-class
       (H-impulse and above) composite reload motor with an adjustable
       ejection delay. Hand-painted the airframe with a full floral design
       rather than leaving it bare, then flew it at a desert high-power
@@ -706,7 +750,7 @@ const PROJECTS = [
     id: "syringe-pump",
     category: "engineering",
     subjects: ["devices", "mechanics"],
-    title: "60cc Don't Email Me — Microcontroller-Driven Syringe Pump",
+    title: "60cc Don't Email Me: Microcontroller-Driven Syringe Pump",
     tagline: "ME 683: Design of Medical Devices, SDSU",
     thumb: "images/engineering/syringe-final-full-setup.jpg",
     dates: "February 2026 – March 2026",
@@ -715,19 +759,27 @@ const PROJECTS = [
       "images/engineering/syringe-final-electronics-box.jpg",
       "images/engineering/syringe-final-control-panel.jpg"
     ],
-    processImages: [
-      "images/engineering/syringe-process-force-diagram.jpg",
-      "images/engineering/syringe-process-cad-holder.jpg",
-      "images/engineering/syringe-process-cad-base.jpg",
-      "images/engineering/syringe-process-cad-rail.jpg",
-      "images/engineering/syringe-process-wiring.jpg",
-      "images/engineering/syringe-process-code.jpg"
+    process: [
+      { heading: "Holding the syringe still",
+        text: "Started from a basic force-balance analysis of how a syringe is used manually (F_plunger ≈ ΔP·A_syringe + F_friction): the holder has to react the plunger force and keep the syringe body stationary." },
+      { image: "images/engineering/syringe-process-force-diagram.jpg", text: "Force balance on the syringe" },
+      { images: ["images/engineering/syringe-process-cad-base.jpg", "images/engineering/syringe-process-cad-holder.jpg"],
+        text: "Slotted syringe holder, modeled in OnShape and 3D printed in PLA" },
+      { image: "images/engineering/syringe-process-cad-rail.jpg", text: "Pump layout: the motor and lead screw drive the plunger" },
+      { heading: "Sizing the motor",
+        text: "Sized the motor and lead screw against a Poiseuille pressure-drop estimate for the restricted outlet, which set the governing case: a max torque of 1.21×10⁻² N·m and max pressure of about 54.6 kPa (≈3.06 N on the plunger), comfortably within the provided motor's capability." },
+      { image: "images/engineering/syringe-process-wiring.jpg", text: "Wiring the Arduino, motor shield, and flow-rate buttons" },
+      { heading: "Calibrating against real measurements",
+        text: "Calibrated motor motion empirically rather than trusting the theoretical steps/mL figure: measured actual dispensed volume over timed runs to arrive at 0.522 mL/rev (open) and 0.422 mL/rev (restricted), then used those measured constants (not the calculated ones) in the Arduino code driving each flow-rate button." },
+      { image: "images/engineering/syringe-process-code.jpg", text: "Arduino code using the measured calibration constants" },
+      { heading: "What we'd change next time",
+        text: "Hit real hardware problems along the way: mechanical alignment issues caused overshoot on step changes, and the motor ran hot enough under sustained restricted-flow operation to warrant adding an emergency-stop command. Identified tight tolerances in the 3D printed holder as the likely root cause of the alignment issue. The fix we'd make next time is a spring-loaded holder that applies gentle pressure from above to keep the syringe seated, plus a small display for flow-rate feedback instead of button-only control." }
     ],
     tags: ["Arduino", "Mechatronics", "OnShape / CAD", "DFM", "Validation Testing"],
     description: `
-      <p>Designed, built, and validated a 60 mL luer-lock syringe pump — a
+      <p>Designed, built, and validated a 60 mL luer-lock syringe pump, a
       motorized medical device that dispenses fluid at a precise,
-      steady-state rate — with software-selectable flow rates from 2 to 20
+      steady-state rate, with software-selectable flow rates from 2 to 20
       mL/min through both an open outlet and a restricted outlet (a 23G x
       3/4" butterfly infusion set). A stepper motor converts rotational
       motion into linear force on the plunger via a lead screw, driven by an
@@ -740,29 +792,6 @@ const PROJECTS = [
       mean. Met the design target of precise, repeatable fluid delivery for
       healthcare and lab applications.</p>
     `,
-    processDescription: `
-      <p>Modeled the syringe holder in OnShape and 3D printed it in PLA — a
-      slotted design that reacts the plunger force and holds the syringe
-      body stationary, following a basic force-balance analysis of how a
-      syringe is used manually (F_plunger ≈ ΔP·A_syringe + F_friction).
-      Sized the motor and lead screw against a Poiseuille pressure-drop
-      estimate for the restricted outlet, which set the governing case: a
-      max torque of 1.21×10⁻² N·m and max pressure of about 54.6 kPa (≈3.06
-      N on the plunger) — comfortably within the provided motor's capability.</p>
-      <p>Calibrated motor motion empirically rather than trusting the
-      theoretical steps/mL figure: measured actual dispensed volume over
-      timed runs to arrive at 0.522 mL/rev (open) and 0.422 mL/rev
-      (restricted), then used those measured constants — not the calculated
-      ones — in the Arduino code driving each flow-rate button.</p>
-      <p>Hit real hardware problems along the way: mechanical alignment
-      issues caused overshoot on step changes, and the motor ran hot enough
-      under sustained restricted-flow operation to warrant adding an
-      emergency-stop command. Identified tight tolerances in the 3D printed
-      holder as the likely root cause of the alignment issue — the fix we'd
-      make next time is a spring-loaded holder that applies gentle pressure
-      from above to keep the syringe seated, plus a small display for
-      flow-rate feedback instead of button-only control.</p>
-    `,
     links: []
   },
 
@@ -771,7 +800,7 @@ const PROJECTS = [
     id: "bmes",
     category: "leadership",
     title: "Biomedical Engineering Society (BMES)",
-    tagline: "Vice President — SDSU",
+    tagline: "Vice President, SDSU",
     thumb: "images/leadership/bmes-final-masimo-group.jpg",
     dates: "June 2024 – May 2026",
     finalImages: [
@@ -780,14 +809,71 @@ const PROJECTS = [
       "images/leadership/bmes-final-industry-night.jpg",
       "images/leadership/bmes-final-tabling-outdoor.jpg"
     ],
-    processImages: [
-      "images/leadership/bmes-process-planning-diagram.jpg",
-      "images/leadership/bmes-process-panel-1.jpg",
-      "images/leadership/bmes-process-panel-2.jpg",
-      "images/leadership/bmes-process-robotics-tour-1.jpg",
-      "images/leadership/bmes-process-robotics-tour-2.jpg",
-      "images/leadership/bmes-process-masimo-meeting.jpg",
-      "images/leadership/bmes-process-masimo-lobby.jpg"
+    process: [
+      { heading: "Planning a year of professional development",
+        text: "Mapped the year's programming into four tracks: professional advice, workshops, facility tours, and hands-on experience." },
+      { image: "images/leadership/bmes-process-planning-diagram.jpg", text: "The professional development plan", wide: true },
+      // From the club's 25/26 working schedule (officer meetings left out).
+      // type drives the label; "Speaker" and "Tour" get the red accent.
+      { heading: "2025–26 at a glance",
+        text: "Every general body meeting, speaker, tour, and social from the year's working schedule.",
+        schedule: [
+          { term: "Fall 2025", events: [
+            { date: "Aug 26", type: "Tabling", title: "Fall tabling" },
+            { date: "Sep 8", type: "GBM", title: "Welcome GBM" },
+            { date: "Sep 22", type: "Workshop", title: "LinkedIn & career-building workshop" },
+            { date: "Sep 26", type: "Social", title: "Fundraiser at Dave & Buster's" },
+            { date: "Oct 6", type: "Speaker", title: "Tara Welbourne, BD" },
+            { date: "Oct 20", type: "GBM", title: "Halloween GBM + lab tour" },
+            { date: "Nov 3", type: "Speaker", title: "Guest speaker" },
+            { date: "Nov 17", type: "GBM", title: "Holiday GBM, SRS prep + lab tour" },
+            { date: "Dec 5", type: "Tour", title: "Masimo facility tour, Irvine" }
+          ] },
+          { term: "Spring 2026", events: [
+            { date: "Jan 27", type: "Tabling", title: "RSO Expo" },
+            { date: "Feb 2", type: "Workshop", title: "Digital Portfolio Workshop" },
+            { date: "Feb 3", type: "Speaker", title: "Medical device design series: FDA guidance" },
+            { date: "Feb 13", type: "Social", title: "Fundraiser & social at Dave & Buster's" },
+            { date: "Feb 16", type: "Speaker", title: "Kelli Knichel, 3D printing at Rady Children's" },
+            { date: "Feb 19", type: "Speaker", title: "Medical device design series: Orthofix" },
+            { date: "Feb 23", type: "Tour", title: "Rady Children's Motion Analysis Lab" },
+            { date: "Feb 25", type: "Social", title: "Game-day fundraiser at Epic Wings" },
+            { date: "Feb 26", type: "Speaker", title: "Medical device design series: Illumina" },
+            { date: "Feb 27", type: "Research", title: "Members present at the Student Research Symposium" },
+            { date: "Mar 2", type: "Workshop", title: "Mock interviews with Career Services" },
+            { date: "Mar 16", type: "Speaker", title: "Joseph Marrocco" },
+            { date: "Apr 6", type: "GBM", title: "Officer elections + Morsi Lab" },
+            { date: "Apr 20", type: "Speaker", title: "Gisselle Ho" },
+            { date: "May 4", type: "GBM", title: "Last GBM of the year" }
+          ] }
+        ] },
+      { images: ["images/leadership/bmes-process-panel-1.jpg", "images/leadership/bmes-process-panel-2.jpg"],
+        text: "Industry Night professional panel" },
+      { heading: "Industry and lab tours",
+        text: "Arranged facility tours to Masimo's headquarters and Rady Children's Motion Analysis Lab, plus on-campus lab tours." },
+      { images: ["images/leadership/bmes-process-masimo-lobby.jpg", "images/leadership/bmes-process-masimo-meeting.jpg"],
+        text: "Touring Masimo's headquarters" },
+      { images: ["images/leadership/bmes-process-robotics-tour-1.jpg", "images/leadership/bmes-process-robotics-tour-2.jpg"],
+        text: "Psyonic tour" },
+      { images: ["images/leadership/bmes-process-nanofab-cleanroom-tour.jpg", "images/leadership/bmes-process-motion-lab-tour.jpg"],
+        text: "Suited up in the NanoFAB cleanroom, and a motion-capture demo at Rady Children's Motion Analysis Lab", wide: true },
+      { heading: "Getting members into research",
+        text: "A big goal for the year was helping members get involved in research, from touring on-campus labs to prepping for and presenting their own projects at SDSU's Student Research Symposium." },
+      { images: [
+          "images/leadership/bmes-process-member-research-1.jpg",
+          "images/leadership/bmes-process-member-research-2.jpg",
+          "images/leadership/bmes-process-member-research-3.jpg"
+        ], text: "Members presenting their NanoFAB research at the Student Research Symposium (SRS)", wide: true },
+      { heading: "Digital Portfolio Workshop",
+        text: "Ran a Digital Portfolio Workshop for members, covering how a portfolio differs from a resume, what to include (process, tools, results, not just outcomes), and free website builders to get started with, to help members present their project work to employers and grad programs." },
+      { image: "images/leadership/bmes-process-portfolio-workshop-slide-1.jpg", wide: true,
+        text: "Why a portfolio, and what counts as a project" },
+      { images: [
+          "images/leadership/bmes-process-portfolio-workshop-slide-2.jpg",
+          "images/leadership/bmes-process-portfolio-workshop-slide-3.jpg"
+        ], text: "Free website builders, what to include, and a step-by-step plan to get started" },
+      { heading: "Behind the scenes",
+        text: "Put together the club's workshops and visited classes to spread the word about BMES. Made tours happen end to end: coordinating dates and logistics with each company, and building the interest forms and transportation sheets members used to sign up and get there. Kept it all organized with a running contact tracker for guest speakers and lab tours (confirmation status, company, role, LinkedIn) across a full semester of weekly programming." }
     ],
     tags: ["Event Planning", "Industry Outreach", "Professional Development"],
     description: `
@@ -796,23 +882,12 @@ const PROJECTS = [
       tours. Founded the project subteam, achieved official BMES national
       chapter recognition for SDSU, and grew membership from 11 to 26.</p>
       <p>Organized an Industry Night professional panel and personally
-      recruited several of its confirmed speakers — including engineers from
-      Solar Turbines, ASML, and Qualcomm — alongside panelists from Masimo
+      recruited several of its confirmed speakers, including engineers from
+      Solar Turbines, ASML, and Qualcomm, alongside panelists from Masimo
       and BD. Arranged facility tours to Masimo's headquarters and Rady
       Children's Motion Analysis Lab, plus on-campus lab tours (NanoFAB,
       the Additive Manufacturing & Advanced Materials Lab, and a
       cardiovascular tissue biomechanics lab).</p>
-    `,
-    processDescription: `
-      <p>Ran a Digital Portfolio Workshop for members — covering how a
-      portfolio differs from a resume, what to include (process, tools,
-      results, not just outcomes), and free website builders to get started
-      with — to help members present their project work to employers and
-      grad programs.</p>
-      <p>Behind the scenes, maintained a running contact tracker for guest
-      speakers and lab tours (confirmation status, company, role, LinkedIn)
-      to keep outreach organized across a full semester of weekly
-      programming.</p>
     `,
     links: []
   },
@@ -820,18 +895,97 @@ const PROJECTS = [
     id: "asme",
     category: "leadership",
     title: "American Society of Mechanical Engineers (ASME)",
-    tagline: "President, Treasurer — SDSU",
-    thumb: "images/leadership/asme-final-tabling.jpg",
+    tagline: "President, Treasurer, SDSU",
+    thumb: "images/leadership/asme-final-gbm-group.jpg",
     dates: "June 2023 – May 2025",
     finalImages: [
-      "images/leadership/asme-final-tabling.jpg",
       "images/leadership/asme-final-gbm-group.jpg",
+      "images/leadership/asme-final-tabling.jpg",
       "images/leadership/asme-final-info-session.jpg"
     ],
-    processImages: [
-      "images/leadership/asme-process-blanket-1.jpg",
-      "images/leadership/asme-process-blanket-2.jpg",
-      "images/leadership/asme-process-bowling-flyer.jpg"
+    process: [
+      { heading: "A full year of programming",
+        text: "Kept members in the loop with monthly calendars and event flyers for general body meetings, design-team meetings, and industry tours." },
+      // Fall from the officers' task-list schedule, spring from the monthly
+      // calendars and GBM flyers. Officer meetings and the weekly spring
+      // design-team meetings are left out to keep it scannable.
+      { heading: "2024–25 at a glance",
+        text: "Every general body meeting, speaker, tour, and social across the year, plus weekly design-team meetings all spring.",
+        schedule: [
+          { term: "Fall 2024", events: [
+            { date: "Aug 31", type: "Social", title: "Balloon animal social" },
+            { date: "Sep 3", type: "Tabling", title: "ECOF Engineering Fair" },
+            { date: "Sep 5", type: "GBM", title: "Info session" },
+            { date: "Sep 9", type: "Social", title: "Trivia night" },
+            { date: "Sep 10", type: "Speaker", title: "UMEC" },
+            { date: "Sep 24", type: "Speaker", title: "Fernando Martinez, ASME San Diego & General Atomics" },
+            { date: "Sep 24", type: "Tour", title: "Cardiovascular Bioengineering Lab" },
+            { date: "Sep 26", type: "Social", title: "Cross-club engineering bonfire, Mission Beach" },
+            { date: "Oct 3", type: "Tour", title: "Solar Turbines" },
+            { date: "Oct 8", type: "Workshop", title: "Resume workshop with UMEC" },
+            { date: "Oct 16", type: "Tour", title: "Dexcom" },
+            { date: "Oct 22", type: "Speaker", title: "Greg Trujillo, APEM" },
+            { date: "Nov 5", type: "Speaker", title: "Evan Keuster, 3D Systems" },
+            { date: "Nov 5", type: "Tour", title: "Dr. Youssef's lab" },
+            { date: "Nov 13", type: "Tour", title: "UC San Diego lab tours" },
+            { date: "Nov 19", type: "Speaker", title: "James Powell, Navy, Solar Turbines & SDSU" },
+            { date: "Dec 3", type: "Speaker", title: "Phillip Benham, Raytheon" }
+          ] },
+          { term: "Spring 2025", events: [
+            { date: "Jan 28", type: "GBM", title: "Welcome back: Kahoot + pizza" },
+            { date: "Feb 4", type: "Speaker", title: "Rodolpho Pereira, Hi-Tech Honeycomb" },
+            { date: "Feb 13", type: "Social", title: "Valentine's Day social" },
+            { date: "Feb 15", type: "Service", title: "Beach clean-up, Imperial Beach" },
+            { date: "Feb 18", type: "Service", title: "Volunteering workshop" },
+            { date: "Mar 4", type: "Speaker", title: "Armando Chavez, General Atomics" },
+            { date: "Mar 11", type: "Social", title: "ASME x SWE jewelry workshop" },
+            { date: "Mar 18", type: "Speaker", title: "Coffee with Industry: small-group chats with guests from many fields" },
+            { date: "Mar 21", type: "Social", title: "ASME x SHPE bowling night" },
+            { date: "Apr 15", type: "Speaker", title: "Industry panel from Southland Industries" },
+            { date: "Apr 29", type: "GBM", title: "Final GBM + T-shirt reveal" }
+          ] }
+        ] },
+      { images: ["images/leadership/asme-process-february-calendar.jpg", "images/leadership/asme-process-march-calendar.jpg"],
+        text: "The monthly calendars sent to members", wide: true },
+      { heading: "Industry tours and speakers",
+        text: "Organized site tours to Solar Turbines, Dexcom, and UC San Diego labs, and brought engineers from companies like General Atomics, Raytheon, and 3D Systems into general body meetings. For Coffee with Industry, guests from many different fields came in to talk with students in small groups, and ASME co-hosted an Industry Night with BMES and IEEE." },
+      { images: [
+          "images/leadership/asme-process-solar-turbines-tour-flyer.jpg",
+          "images/leadership/asme-process-dexcom-tour-flyer.jpg",
+          "images/leadership/asme-process-ucsd-lab-tours-flyer.jpg",
+          "images/leadership/asme-process-youseff-lab-tour-flyer.jpg"
+        ], text: "Tour flyers", wide: true },
+      { images: ["images/leadership/asme-process-cleanroom-tour.jpg", "images/leadership/asme-process-lab-tour-demo.jpg"],
+        text: "On lab tours: suited up for the cleanroom, and a hands-on equipment demo" },
+      { images: ["images/leadership/asme-process-lab-tour-group.jpg", "images/leadership/asme-process-lab-tour-talk.jpg"],
+        text: "Members outside the cleanroom, and a walkthrough of a research lab" },
+      { images: [
+          "images/leadership/asme-process-hi-tech-honeycomb-gbm-flyer.jpg",
+          "images/leadership/asme-process-general-atomics-gbm-flyer.jpg",
+          "images/leadership/asme-process-coffee-with-industry-flyer.jpg",
+          "images/leadership/asme-process-southland-panel-flyer.jpg"
+        ], text: "Speaker flyers: Hi-Tech Honeycomb, General Atomics, Coffee with Industry, and a Southland Industries panel", wide: true },
+      { images: ["images/leadership/asme-process-southland-panel.jpg", "images/leadership/asme-process-industry-night.jpg"],
+        text: "The Southland Industries panel, and the BMES x ASME x IEEE Industry Night", wide: true },
+      { heading: "Design team",
+        text: "Alongside general meetings, the design team met every week so members could get hands-on building real hardware." },
+      { images: ["images/leadership/asme-process-design-team-build.jpg", "images/leadership/asme-process-design-team-drone.jpg"],
+        text: "Design team build sessions" },
+      { heading: "Community and socials",
+        text: "Also ran a blanket-making community service event and a beach clean-up, tabled at SDSU's Explore SDSU Open House to recruit new members, and hosted cross-club socials." },
+      { images: ["images/leadership/asme-process-tabling-1.jpg", "images/leadership/asme-process-tabling-2.jpg"],
+        text: "Tabling to recruit new members" },
+      { images: ["images/leadership/asme-process-blanket-1.jpg", "images/leadership/asme-process-blanket-2.jpg"],
+        text: "Blanket-making community service event" },
+      { image: "images/leadership/asme-process-speed-dating-social.jpg", text: "A speed-dating style social" },
+      { images: [
+          "images/leadership/asme-process-welcome-back-gbm-flyer.jpg",
+          "images/leadership/asme-process-trivia-night-flyer.jpg",
+          "images/leadership/asme-process-bowling-flyer.jpg",
+          "images/leadership/asme-process-final-gbm-flyer.jpg"
+        ], text: "Welcome back, trivia night, ASME x SHPE bowling, and the final GBM", wide: true },
+      { heading: "Behind the scenes",
+        text: "Ran the business side of the club. Helped put together grant applications, including the funding proposal that secured a $17,000 grant, and managed budgeting and reimbursements as treasurer. Filed the paperwork to get ASME recognized with the university, held and facilitated officer meetings to plan the semester, and created the slides for our general body meetings." }
     ],
     tags: ["Event Planning", "Budget Management", "Community Outreach"],
     description: `
@@ -841,12 +995,8 @@ const PROJECTS = [
       reimbursements.</p>
       <p>Organized a full year of weekly general body and design-team
       meetings, alongside industry site tours (Solar Turbines, Dexcom, UC
-      San Diego labs) and cross-club social events — an ASME x SHPE bowling
+      San Diego labs) and cross-club social events: an ASME x SHPE bowling
       night, an ASME x SWE jewelry workshop, a bonfire, and trivia night.</p>
-    `,
-    processDescription: `
-      <p>Also ran a blanket-making community service event and tabled at
-      SDSU's Explore SDSU Open House to recruit new members.</p>
     `,
     links: []
   }

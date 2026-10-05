@@ -264,7 +264,7 @@ a { color: inherit; }
   margin-top: 1.5rem;
   padding-top: 1.2rem;
   border-top: 1px solid var(--rule);
-  max-width: 360px;
+  max-width: 420px;
 }
 
 .toolbox-mini-toggle {
@@ -290,7 +290,7 @@ a { color: inherit; }
 }
 
 .toolbox-mini-hint {
-  color: var(--muted);
+  color: var(--oxblood);
   font-size: 0.62rem;
   letter-spacing: 0.04em;
 }
@@ -309,10 +309,11 @@ a { color: inherit; }
   border: none;
   box-shadow: none;
   transition: transform 0.2s ease;
+  cursor: pointer;
 }
 
-.toolbox-mini-toggle:hover .toolbox-stage,
-.toolbox-mini-toggle:focus-visible .toolbox-stage {
+.toolbox-stage:hover,
+.toolbox-mini:has(.toolbox-mini-toggle:hover, .toolbox-mini-toggle:focus-visible) .toolbox-stage {
   transform: translateY(-2px);
 }
 
@@ -343,10 +344,30 @@ a { color: inherit; }
   transform: scale(1);
 }
 
+/* Hover peek: while closed, hovering the box (or the label above it) swaps in
+   the "partial" still so the lid looks slightly cracked open. That still is
+   framed differently from "closed" and has a caption baked into its bottom
+   edge, so it's clipped and scaled/shifted to sit on the closed box's
+   footprint (bottom-center 288,366 vs 322,323 on the 560x380 canvas). */
+.toolbox-frame[data-frame="partial"] {
+  clip-path: inset(0 0 14% 0);
+  transform-origin: 57.6% 85%;
+  transform: translate(-6.2%, 11.3%) scale(0.9);
+}
+.toolbox-stage[data-state="closed"]:hover .toolbox-frame[data-frame="closed"],
+.toolbox-mini:has(.toolbox-mini-toggle:hover, .toolbox-mini-toggle:focus-visible) .toolbox-stage[data-state="closed"] .toolbox-frame[data-frame="closed"] {
+  opacity: 0;
+}
+.toolbox-stage[data-state="closed"]:hover .toolbox-frame[data-frame="partial"],
+.toolbox-mini:has(.toolbox-mini-toggle:hover, .toolbox-mini-toggle:focus-visible) .toolbox-stage[data-state="closed"] .toolbox-frame[data-frame="partial"] {
+  opacity: 1;
+  transform: translate(-6.2%, 11.3%) scale(0.92);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .toolbox-frame { transition: none; }
-  .toolbox-mini-toggle:hover .toolbox-stage,
-  .toolbox-mini-toggle:focus-visible .toolbox-stage { transform: none; }
+  .toolbox-stage:hover,
+  .toolbox-mini:has(.toolbox-mini-toggle:hover, .toolbox-mini-toggle:focus-visible) .toolbox-stage { transform: none; }
 }
 
 /* ---- Software badges: small enamel-style tiles pinned over the open trays,
@@ -363,8 +384,8 @@ a { color: inherit; }
 .tool-badge {
   position: absolute;
   transform: translate(-50%, -50%) translateY(8px) scale(0.9);
-  width: 28px;
-  height: 28px;
+  width: 46px;
+  height: 46px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -403,6 +424,15 @@ a { color: inherit; }
   font-weight: 700;
   font-size: 0.65rem;
   color: var(--oxblood);
+}
+
+.tool-badge img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 1px;
+  box-sizing: border-box;
+  border-radius: 3px;
 }
 
 .tool-tooltip {
@@ -497,6 +527,26 @@ a { color: inherit; }
   box-shadow: 0 0 0 1px var(--oxblood);
 }
 
+/* Set when a toolbox badge is clicked, to trace a tool to the project
+   card(s) that used it — a brief pulse to draw the eye, then it settles
+   into a steady highlight that stays until a project card is opened. */
+.card.tool-highlight {
+  animation: tool-highlight-pulse 1.3s ease-in-out 2;
+  border-color: var(--oxblood);
+  box-shadow: 0 0 0 3px var(--oxblood);
+}
+
+@keyframes tool-highlight-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(122, 35, 49, 0); }
+  50% { box-shadow: 0 0 0 4px rgba(122, 35, 49, 0.45); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card.tool-highlight {
+    animation: none;
+  }
+}
+
 .card-image {
   aspect-ratio: 4 / 3;
   overflow: hidden;
@@ -521,28 +571,43 @@ a { color: inherit; }
 
 .card-body { padding: 1.1rem; }
 
-.card-category {
+.card-top-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1.1rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.card-index-category {
   font-family: var(--mono);
   font-size: 0.68rem;
   letter-spacing: 0.08em;
   color: var(--oxblood);
-  margin: 0 0 0.5rem;
   text-transform: uppercase;
 }
 
+.card-year {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
 .card-title {
-  font-family: var(--sans);
-  font-weight: 600;
-  font-size: 1.02rem;
-  line-height: 1.35;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1.3;
   margin: 0 0 0.5rem;
   color: var(--ink);
 }
 
 .card-tag {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.03em;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
   color: var(--muted);
   margin: 0 0 0.6rem;
 }
@@ -551,22 +616,28 @@ a { color: inherit; }
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.9rem;
 }
 
 .card-tags span {
   font-family: var(--mono);
   font-size: 0.65rem;
-  border: 1px solid var(--card-border);
+  letter-spacing: 0.02em;
+  border: 1px solid var(--oxblood);
   border-radius: 999px;
   padding: 0.15rem 0.55rem;
-  color: var(--muted);
+  color: var(--oxblood);
 }
 
-.card-arrow {
+.card-cta {
+  display: block;
   font-family: var(--mono);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
   color: var(--oxblood);
+  font-weight: 600;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--rule);
 }
 
 /* Featured projects: bigger cards, so the flagship work stands out */
@@ -948,6 +1019,7 @@ a { color: inherit; }
 }
 
 .sidebar-tools .tool-mini {
+  position: relative;
   width: 34px;
   height: 34px;
   display: flex;
@@ -955,10 +1027,28 @@ a { color: inherit; }
   justify-content: center;
   background: #fff;
   border: 1px solid var(--card-border);
+  border-radius: 4px;
   font-family: var(--serif);
   font-weight: 700;
   font-size: 0.75rem;
   color: var(--oxblood);
+  cursor: default;
+}
+
+.sidebar-tools .tool-mini img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 2px;
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+
+.sidebar-tools .tool-mini:hover .tool-tooltip,
+.sidebar-tools .tool-mini:focus-visible .tool-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
 }
 
 .sidebar-star {
@@ -1134,6 +1224,13 @@ a { color: inherit; }
   filter: saturate(0.94) sepia(0.05) contrast(1.02);
 }
 
+/* Flyers and calendars are square graphics with text to the edges — show
+   them whole instead of cropping to 4:3. Keyed off the filename suffix. */
+.modal-process-gallery img[src*="-flyer."],
+.modal-process-gallery img[src*="-calendar."] {
+  object-fit: contain;
+}
+
 .modal-process-gallery figcaption {
   font-family: var(--mono);
   font-size: 0.68rem;
@@ -1236,6 +1333,165 @@ a { color: inherit; }
   margin: 0;
 }
 
+/* Text between images: a full-width section that explains what's coming
+   next (or what was just shown) — no image, no step number. */
+.process-note {
+  max-width: 680px;
+  margin: 0.5rem 0 1.75rem;
+  padding: 0 0 1.5rem 1rem;
+  border-left: 3px solid var(--oxblood);
+  border-bottom: 1px solid var(--rule);
+}
+
+.process-note-heading {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 0.45rem;
+}
+
+.process-note p,
+.process-wide-text p {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--ink);
+  margin: 0 0 0.6rem;
+}
+
+.process-note p:last-child,
+.process-wide-text p:last-child { margin-bottom: 0; }
+
+/* Wide step: explanation on top, the image big underneath it. */
+.process-wide {
+  padding-bottom: 1.75rem;
+  margin-bottom: 1.75rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.process-wide-text {
+  max-width: 680px;
+  margin-bottom: 1rem;
+}
+
+.process-wide-text .process-row-index {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+/* Frame hugs the photo (centered) rather than letterboxing it in a box
+   the full width of the modal. */
+.process-wide-media {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Side-by-side pairs need the full width to split between them. */
+.process-wide-media:has(.process-row-pair) { width: 100%; }
+.process-wide-media .process-row-pair img,
+.process-wide-media .process-row-pair video { width: 100%; }
+
+.process-wide-media img,
+.process-wide-media video {
+  width: auto;
+  max-width: 100%;
+  aspect-ratio: auto;
+  max-height: 560px;
+}
+
+/* Year-at-a-glance event list (schedule steps) — one column per term. */
+.process-schedule {
+  margin: 0.5rem 0 1.75rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.process-schedule-intro {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  max-width: 680px;
+  margin: 0 0 1.1rem;
+}
+
+.schedule-terms {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+.schedule-term {
+  background: #fbf7ef;
+  border: 1px solid var(--card-border);
+  border-top: 3px solid var(--oxblood);
+  padding: 0.9rem 1rem 0.6rem;
+}
+
+.schedule-term-name {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  margin: 0 0 0.5rem;
+}
+
+.schedule-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.schedule-event {
+  display: grid;
+  grid-template-columns: 52px 74px 1fr;
+  gap: 0.6rem;
+  align-items: baseline;
+  padding: 0.45rem 0;
+  border-bottom: 1px dashed var(--rule);
+}
+
+.schedule-event:last-child { border-bottom: none; }
+
+.schedule-date {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.schedule-type {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  justify-self: start;
+  padding: 0.1rem 0.35rem;
+  border: 1px solid var(--card-border);
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+/* The outward-facing events (speakers, tours) get the accent so they stand
+   out from routine meetings at a glance. */
+.schedule-event[data-type="speaker"] .schedule-type,
+.schedule-event[data-type="tour"] .schedule-type {
+  color: #fff;
+  background: var(--oxblood);
+  border-color: var(--oxblood);
+}
+
+.schedule-title {
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
 @media (max-width: 640px) {
   .process-row {
     grid-template-columns: 1fr;
@@ -1262,6 +1518,21 @@ a { color: inherit; }
   .section-wrap, .project-section, .about-section { padding: 2.5rem 1.25rem; }
   .card-grid { grid-template-columns: 1fr; }
   .filter-bar { gap: 0.8rem; overflow-x: auto; padding-bottom: 0.25rem; }
+}
+
+/* Project modal (case study): the 2-column layout only works with room to
+   breathe — below ~700px the fixed sidebar/support columns force horizontal
+   overflow, so stack everything into one column instead. */
+@media (max-width: 700px) {
+  .modal-overlay { padding: 0; }
+  .modal { max-width: 100%; max-height: 100vh; height: 100%; }
+  .modal-topbar { padding: 1.1rem 1.25rem 0; flex-wrap: wrap; row-gap: 0.6rem; }
+  .modal-body { grid-template-columns: 1fr; padding: 1.1rem 1.25rem 1rem; gap: 1.75rem; }
+  .modal-main h3 { font-size: 1.35rem; }
+  .modal-hero-block { grid-template-columns: 1fr; }
+  .modal-hero-support { flex-direction: row; flex-wrap: wrap; }
+  .modal-hero-support .support-thumb { flex: 1 1 100px; min-width: 90px; }
+  .modal-process { margin: 1.5rem 1.25rem 2rem; }
 }
 
 /* ---------------- Lightbox ---------------- */
@@ -1342,4 +1613,97 @@ a { color: inherit; }
 @media (max-width: 640px) {
   .lightbox-overlay { gap: 0.6rem; padding: 3vh 2vw; }
   .lightbox-nav { width: 36px; height: 36px; min-width: 36px; font-size: 1rem; }
+}
+
+/* ---------------- Scroll reveal (see main.js) ---------------- */
+html.js-reveal .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+html.js-reveal .reveal.is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------------- Landing intro + toolbox nudge ----------------
+   Uses the individual `translate`/`rotate`/`scale` properties so these
+   compose with each element's own `transform` (the photo's tilt, button
+   and toolbox hover lifts) instead of overwriting it, and fill-mode
+   `backwards` so each element hands back to its normal styles once done. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes intro-rise {
+    from { opacity: 0; translate: 0 22px; }
+  }
+  @keyframes intro-slide-left {
+    from { opacity: 0; translate: 14px 0; }
+  }
+  @keyframes intro-photo-drop {
+    from { opacity: 0; translate: 0 -40px; rotate: -6deg; }
+    70%  { opacity: 1; rotate: 1.5deg; }
+  }
+  @keyframes intro-clip-snap {
+    from { opacity: 0; scale: 1.6; }
+    60%  { opacity: 1; scale: 0.9; }
+  }
+  @keyframes intro-underline {
+    from { border-bottom-color: transparent; }
+  }
+
+  .hero-copy .eyebrow-tag { animation: intro-rise 0.7s 0.05s cubic-bezier(0.2, 0.7, 0.2, 1) backwards,
+                                       intro-underline 0.6s 0.5s ease backwards; }
+  .hero-copy h1           { animation: intro-rise 0.8s 0.15s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
+  .hero-copy h1 em        { display: inline-block;
+                            animation: intro-rise 0.8s 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
+  .hero-bio               { animation: intro-rise 0.8s 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
+  .hero-copy .btn-primary { animation: intro-rise 0.8s 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
+  .hero-margin-note       { animation: intro-rise 0.9s 1.2s ease backwards; }
+
+  .hero-photo-frame       { animation: intro-photo-drop 1s 0.25s cubic-bezier(0.3, 0.8, 0.3, 1) backwards; }
+  .binder-clip            { animation: intro-clip-snap 0.45s 1.05s ease-out backwards; }
+
+  .hero-sidebar li        { animation: intro-slide-left 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
+  .hero-sidebar li:nth-child(1) { animation-delay: 0.45s; }
+  .hero-sidebar li:nth-child(2) { animation-delay: 0.52s; }
+  .hero-sidebar li:nth-child(3) { animation-delay: 0.59s; }
+  .hero-sidebar li:nth-child(4) { animation-delay: 0.66s; }
+  .hero-sidebar li:nth-child(5) { animation-delay: 0.73s; }
+  .hero-sidebar li:nth-child(6) { animation-delay: 0.8s; }
+  .hero-sidebar li:nth-child(7) { animation-delay: 0.87s; }
+  .toolbox-mini           { animation: intro-rise 0.8s 0.95s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
+
+  /* Toolbox nudge: a little hop-and-wiggle, then a rest, a few times — just
+     enough to say "this does something". Stops for good once it's been
+     opened (main.js adds .is-seen) or while the visitor is hovering it. */
+  @keyframes toolbox-nudge {
+    0%, 30%, 100% { translate: 0 0; rotate: 0deg; }
+    6%  { translate: 0 -7px; rotate: -3deg; }
+    12% { translate: 0 0; rotate: 2.5deg; }
+    17% { translate: 0 -3px; rotate: -1.5deg; }
+    22% { translate: 0 0; rotate: 1deg; }
+  }
+  .toolbox-mini:not(.is-seen) .toolbox-stage[data-state="closed"] {
+    transform-origin: 50% 90%;
+    animation: toolbox-nudge 3.2s 2s ease-in-out 4;
+  }
+  .toolbox-mini:not(.is-seen) .toolbox-stage[data-state="closed"]:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes hint-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(138, 31, 43, 0.55); }
+    70%  { box-shadow: 0 0 0 7px rgba(138, 31, 43, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(138, 31, 43, 0); }
+  }
+  .toolbox-mini:not(.is-seen) .toolbox-mini-hint::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: 0.4rem;
+    border-radius: 50%;
+    background: var(--oxblood);
+    vertical-align: 0.1em;
+    animation: hint-pulse 1.8s 1.6s ease-out infinite backwards;
+  }
 }

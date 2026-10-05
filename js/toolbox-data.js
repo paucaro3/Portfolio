@@ -17,6 +17,10 @@
     skills:   short phrases shown in the tooltip
     position: { x, y } percentages, relative to the open toolbox image, used
               to place the badge over its tray
+    projects: array of project ids (matching PROJECTS in data.js) that used
+              this tool — clicking the badge scrolls to and highlights each
+              matching card, so leave this empty rather than guessing if a
+              project isn't confirmed to use the tool
     href:     a project URL/anchor to link to, or null to keep the badge
               informational only (no dead link)
 */
@@ -28,30 +32,46 @@ const TOOLBOX_FRAMES = [
 ];
 
 const SOFTWARE_TOOLS = [
-  // EDIT ME: real logo files go in images/toolbox/software/ — point `icon`
-  // at one and it replaces the monogram automatically (see toolboxBadgeTemplate).
-  { name: "SolidWorks", mark: "SO", icon: null,
+  { name: "SolidWorks", mark: "SO", icon: "images/toolbox/software/solidworks.png",
     skills: ["CAD", "Assemblies", "Technical Drawings", "Design for Manufacturing"],
-    position: { x: 30, y: 16 }, href: null },
-  { name: "AutoCAD", mark: "AU", icon: null,
+    position: { x: 30, y: 12 },
+    projects: ["thesis", "senior-design-suspension", "bioelectronic-epilepsy", "bioelectronic-diabetes", "transtibial-prosthetic"],
+    href: null },
+  // EDIT ME: no project currently confirms AutoCAD in its tags/toolsUsed —
+  // tell me which project(s) used it and I'll fill this in.
+  { name: "AutoCAD", mark: "AU", icon: "images/toolbox/software/autocad.png",
     skills: ["2D CAD", "Technical Drawings", "Layouts"],
-    position: { x: 57, y: 19 }, href: null },
-  { name: "COMSOL", mark: "CM", icon: null,
+    position: { x: 57, y: 15 },
+    projects: [],
+    href: null },
+  { name: "COMSOL", mark: "CM", icon: "images/toolbox/software/comsol.jpg",
     skills: ["Multiphysics Simulation", "Transport Modeling", "Device Modeling"],
-    position: { x: 84, y: 23 }, href: null },
-  { name: "Python", mark: "PY", icon: null,
+    position: { x: 84, y: 19 },
+    projects: ["thesis"],
+    href: null },
+  { name: "Python", mark: "PY", icon: "images/toolbox/software/python.png",
     skills: ["Data Analysis", "Automation", "Scientific Computing"],
-    position: { x: 25, y: 50 }, href: null },
-  { name: "MATLAB", mark: "MA", icon: null,
+    position: { x: 25, y: 46 },
+    projects: ["thesis", "firmware-intern"],
+    href: null },
+  { name: "MATLAB", mark: "MA", icon: "images/toolbox/software/matlab.jpg",
     skills: ["Data Analysis", "Modeling", "Signal Processing"],
-    position: { x: 55, y: 54 }, href: null },
-  { name: "Arduino", mark: "AR", icon: null,
+    position: { x: 55, y: 50 },
+    projects: ["hardware-intern"],
+    href: null },
+  { name: "Arduino", mark: "AR", icon: "images/toolbox/software/arduino.png",
     skills: ["Embedded Prototyping", "Sensors", "Hardware Control"],
-    position: { x: 85, y: 58 }, href: null },
-  { name: "CoventorWare", mark: "CW", icon: null,
-    skills: ["MEMS Modeling", "Microfabrication Simulation"],
-    position: { x: 30, y: 82 }, href: null },
-  { name: "Gamry Analyst", mark: "GA", icon: null,
+    position: { x: 85, y: 54 },
+    projects: ["senior-design-suspension", "syringe-pump"],
+    href: null },
+  { name: "CoventorWare", mark: "CW", icon: "images/toolbox/software/coventorware.png",
+    skills: ["Mask Layout", "MEMS Modeling", "Microfabrication Simulation"],
+    position: { x: 30, y: 88 },
+    projects: ["thesis", "bioelectronic-epilepsy", "bioelectronic-diabetes"],
+    href: null },
+  { name: "Gamry Analyst", mark: "GA", icon: "images/toolbox/software/gamry-analyst.jpg",
     skills: ["Electrochemical Characterization", "EIS", "CV", "Data Analysis"],
-    position: { x: 57, y: 82 }, href: null }
+    position: { x: 57, y: 88 },
+    projects: ["thesis", "bioelectronic-diabetes"],
+    href: null }
 ];

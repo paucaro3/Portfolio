@@ -3,22 +3,58 @@ document.getElementById("year").textContent = new Date().getFullYear();
 // FALLBACK_IMG and handleImgError are defined in index.html's <head> — see the
 // comment there for why.
 
-function cardTemplate(project) {
+// ---------------- Date parsing (cards + timeline) ----------------
+const MONTH_ABBR = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTH_INDEX = { january:0, february:1, march:2, april:3, may:4, june:5, july:6, august:7, september:8, october:9, november:10, december:11 };
+
+// Parses "August 2024 – May 2025" (month optional, single-year strings also
+// work) into {startYear, endYear, startMonth, endMonth} — startMonth/endMonth
+// are 0-11 or null when no month was given, used both for the fractional
+// timeline position and for the "Aug 2024" style labels.
+function parseDateRange(str) {
+  if (!str) return null;
+  const parts = str.split(/[–-]/).map(s => s.trim());
+  const parseOne = part => {
+    if (!part) return null;
+    const yearMatch = part.match(/\d{4}/);
+    if (!yearMatch) return null;
+    const monthMatch = part.match(/[A-Za-z]+/);
+    const monthIdx = monthMatch ? MONTH_INDEX[monthMatch[0].toLowerCase()] : undefined;
+    return { year: parseInt(yearMatch[0], 10), month: monthIdx === undefined ? null : monthIdx };
+  };
+  const start = parseOne(parts[0]);
+  if (!start) return null;
+  const end = parseOne(parts[1]) || start;
+  return { startYear: start.year, endYear: end.year, startMonth: start.month, endMonth: end.month };
+}
+
+function monthYearLabel(year, month) {
+  return month === null ? String(year) : `${MONTH_ABBR[month]} ${year}`;
+}
+
+function cardTemplate(project, index) {
   const category = (project.subjects && project.subjects[0]) || project.category;
+  const range = parseDateRange(project.dates);
+  const year = range
+    ? (range.startYear === range.endYear ? String(range.startYear) : `${range.startYear}–${range.endYear}`)
+    : "";
   return `
     <article class="card" data-id="${project.id}" tabindex="0">
+      <div class="card-top-meta">
+        <span class="card-index-category">${String(index + 1).padStart(2, "0")} &nbsp;|&nbsp; ${category.toUpperCase()}</span>
+        ${year ? `<span class="card-year">[${year}]</span>` : ""}
+      </div>
       <div class="card-image">
         <img src="${project.thumb}" alt="${project.title}" onerror="handleImgError(this)">
       </div>
       <div class="card-body">
-        <p class="card-category">${category.toUpperCase()}</p>
         <h3 class="card-title">${project.title}</h3>
         <p class="card-tag">${project.tagline}</p>
         ${project.tags && project.tags.length ? `
           <div class="card-tags">
             ${project.tags.slice(0, 3).map(t => `<span>${t}</span>`).join("")}
           </div>` : ""}
-        <span class="card-arrow">→</span>
+        <span class="card-cta">VIEW CASE STUDY &rarr;</span>
       </div>
     </article>
   `;
@@ -44,7 +80,8 @@ function galleryMediaTemplate(src, alt) {
 function captionFromSrc(src) {
   const filename = src.split("/").pop().replace(/\.[^.]+$/, "");
   const afterMarker = filename.includes("-process-") ? filename.split("-process-")[1] : filename;
-  return afterMarker.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  return afterMarker.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+    .replace(/\b(Ucsd|Gbm|Asme|Shpe|Swe|Sdsu|Mems)\b/g, w => w.toUpperCase());
 }
 
 function processMediaTemplate(src, alt) {
@@ -55,17 +92,72 @@ function processMediaTemplate(src, alt) {
 // images) beside its own short line — a steady left/right rhythm (image
 // always on the left) instead of a zigzag, and instead of a photo grid with
 // a separate wall of text.
+//
+// Two other step shapes break up that rhythm when a photo needs explaining:
+//   { heading, text }            — a text-only section between images
+//   { heading?, text, image, wide: true } — text first, then the image full
+//                                  width underneath it (long-form, like a
+//                                  write-up), for photos that need room
+// A schedule step ({ heading, text?, schedule: [{ term, events: [{ date,
+// type, title }] }] }) renders as a "year at a glance" event list, one
+// column per term — for org calendars that would read as clutter as images.
+function scheduleTemplate(step) {
+  const terms = step.schedule.map(term => `
+    <div class="schedule-term">
+      <p class="schedule-term-name">${term.term}</p>
+      <ol class="schedule-list">
+        ${term.events.map(ev => `
+          <li class="schedule-event" data-type="${(ev.type || "").toLowerCase()}">
+            <span class="schedule-date">${ev.date}</span>
+            <span class="schedule-type">${ev.type || ""}</span>
+            <span class="schedule-title">${ev.title}</span>
+          </li>`).join("")}
+      </ol>
+    </div>`).join("");
+  return `
+    <div class="process-schedule">
+      ${step.heading ? `<h5 class="process-note-heading">${step.heading}</h5>` : ""}
+      ${step.text ? `<p class="process-schedule-intro">${step.text}</p>` : ""}
+      <div class="schedule-terms">${terms}</div>
+    </div>
+  `;
+}
+
 function processStepTemplate(step, index, alt) {
+  if (step.schedule) return scheduleTemplate(step);
+  const isNote = !step.image && !(step.images && step.images.length);
+  if (isNote) {
+    return `
+      <div class="process-note">
+        ${step.heading ? `<h5 class="process-note-heading">${step.heading}</h5>` : ""}
+        ${step.text ? `<p>${step.text}</p>` : ""}
+      </div>
+    `;
+  }
   const media = step.images && step.images.length
     ? `<div class="process-row-pair">${step.images.map(src => galleryMediaTemplate(src, alt)).join("")}</div>`
     : galleryMediaTemplate(step.image, alt);
+  if (step.wide) {
+    return `
+      <div class="process-wide">
+        <div class="process-wide-text">
+          <span class="process-row-index">${String(index + 1).padStart(2, "0")}</span>
+          ${step.heading ? `<h5 class="process-note-heading">${step.heading}</h5>` : ""}
+          ${step.caption ? `<p class="process-row-caption">${step.caption}</p>` : ""}
+          ${step.text ? `<p>${step.text}</p>` : ""}
+        </div>
+        <div class="process-row-media process-wide-media">${media}</div>
+      </div>
+    `;
+  }
   return `
     <div class="process-row">
       <span class="process-row-index">${String(index + 1).padStart(2, "0")}</span>
       <div class="process-row-media">${media}</div>
       <div class="process-row-text">
+        ${step.heading ? `<h5 class="process-note-heading">${step.heading}</h5>` : ""}
         ${step.caption ? `<p class="process-row-caption">${step.caption}</p>` : ""}
-        <p>${step.text}</p>
+        <p>${step.text || ""}</p>
       </div>
     </div>
   `;
@@ -156,35 +248,6 @@ function setSidebarBlock(blockId, fieldId, value, isList) {
   }
 }
 
-// ---------------- Timeline (sidebar, per project) ----------------
-const MONTH_ABBR = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const MONTH_INDEX = { january:0, february:1, march:2, april:3, may:4, june:5, july:6, august:7, september:8, october:9, november:10, december:11 };
-
-// Parses "August 2024 – May 2025" (month optional, single-year strings also
-// work) into {startYear, endYear, startMonth, endMonth} — startMonth/endMonth
-// are 0-11 or null when no month was given, used both for the fractional
-// timeline position and for the "Aug 2024" style labels.
-function parseDateRange(str) {
-  if (!str) return null;
-  const parts = str.split(/[–-]/).map(s => s.trim());
-  const parseOne = part => {
-    if (!part) return null;
-    const yearMatch = part.match(/\d{4}/);
-    if (!yearMatch) return null;
-    const monthMatch = part.match(/[A-Za-z]+/);
-    const monthIdx = monthMatch ? MONTH_INDEX[monthMatch[0].toLowerCase()] : undefined;
-    return { year: parseInt(yearMatch[0], 10), month: monthIdx === undefined ? null : monthIdx };
-  };
-  const start = parseOne(parts[0]);
-  if (!start) return null;
-  const end = parseOne(parts[1]) || start;
-  return { startYear: start.year, endYear: end.year, startMonth: start.month, endMonth: end.month };
-}
-
-function monthYearLabel(year, month) {
-  return month === null ? String(year) : `${MONTH_ABBR[month]} ${year}`;
-}
-
 // School, shown on every project's timeline as fixed reference points — not
 // tied to any project id, so they never highlight as "current".
 const EDUCATION_MILESTONES = [
@@ -246,7 +309,7 @@ function buildGallery(project) {
       const imgs = (step.images && step.images.length) ? step.images : (step.image ? [step.image] : []);
       imgs.forEach(src => {
         if (!isPlainImage(src)) return;
-        gallery.push({ src, caption: step.caption || step.text || captionFromSrc(src) });
+        gallery.push({ src, caption: step.caption || step.heading || step.text || captionFromSrc(src) });
       });
     });
   } else if (project.processImages && project.processImages.length) {
@@ -263,6 +326,7 @@ let currentGallery = [];
 function openModal(project) {
   openProjectId = project.id;
   syncOpenCardBorder();
+  clearToolHighlights();
 
   const category = (project.subjects && project.subjects.length)
     ? project.subjects.slice(0, 2).map(s => s.toUpperCase()).join(" / ")
@@ -294,8 +358,14 @@ function openModal(project) {
     // A project migrated from the legacy format can still carry a longer
     // narrative in processDescription — keep it, appended below the rows,
     // rather than silently dropping real written content.
+    // Text-only notes don't take a step number, so numbering stays 01, 02…
+    // across just the images.
+    let stepNumber = 0;
     const rows = project.process
-      .map((step, i) => processStepTemplate(step, i, `${project.title} — process`))
+      .map(step => {
+        const hasMedia = step.image || (step.images && step.images.length);
+        return processStepTemplate(step, hasMedia ? stepNumber++ : -1, `${project.title} process`);
+      })
       .join("");
     const narrative = project.processDescription
       ? `<div class="modal-description modal-process-narrative">${project.processDescription}</div>`
@@ -305,7 +375,7 @@ function openModal(project) {
   } else if (project.processImages && project.processImages.length) {
     // Legacy fallback for projects not yet migrated to `process`.
     const gallery = project.processImages
-      .map(src => processMediaTemplate(src, `${project.title} — process`))
+      .map(src => processMediaTemplate(src, `${project.title} process`))
       .join("");
     modalProcessContent.innerHTML = `
       <div class="modal-process-gallery">${gallery}</div>
@@ -340,9 +410,19 @@ function openModal(project) {
   const toolsField = document.getElementById("modal-tools");
   if (project.toolsUsed && project.toolsUsed.length) {
     toolsBlock.hidden = false;
-    toolsField.innerHTML = project.toolsUsed.map(name => {
+    toolsField.innerHTML = project.toolsUsed.map((name, i) => {
+      const match = SOFTWARE_TOOLS.find(t => t.name === name);
       const mark = name.replace(/[^A-Za-z]/g, "").slice(0, 2).toUpperCase();
-      return `<div class="tool-mini" title="${name}">${mark}</div>`;
+      const media = (match && match.icon)
+        ? `<img src="${match.icon}" alt="">`
+        : mark;
+      return `
+        <div class="tool-mini" tabindex="0" aria-describedby="sidebar-tool-tip-${i}">
+          ${media}
+          <span class="tool-tooltip" role="tooltip" id="sidebar-tool-tip-${i}">
+            <strong>${name}</strong>
+          </span>
+        </div>`;
     }).join("");
   } else {
     toolsBlock.hidden = true;
@@ -508,7 +588,7 @@ function toolboxBadgeTemplate(tool, index) {
   const tag = tool.href ? "a" : "button";
   const hrefAttr = tool.href ? ` href="${tool.href}"` : ` type="button"`;
   return `
-    <${tag} class="tool-badge" style="left:${tool.position.x}%; top:${tool.position.y}%; transition-delay:${(index * 0.07).toFixed(2)}s"${hrefAttr}
+    <${tag} class="tool-badge" data-tool-index="${index}" style="left:${tool.position.x}%; top:${tool.position.y}%; transition-delay:${(index * 0.07).toFixed(2)}s"${hrefAttr}
       aria-describedby="tool-tip-${index}">
       ${media}
       <span class="tool-tooltip" role="tooltip" id="tool-tip-${index}">
@@ -520,6 +600,33 @@ function toolboxBadgeTemplate(tool, index) {
 }
 
 toolboxBadges.innerHTML = SOFTWARE_TOOLS.map(toolboxBadgeTemplate).join("");
+
+// Clicking a badge traces it to the project(s) that used it — scroll to the
+// first match and flash every matching card, across both the Featured
+// Projects grid and Experience (a tool can span both).
+function clearToolHighlights() {
+  document.querySelectorAll(".card.tool-highlight").forEach(card => card.classList.remove("tool-highlight"));
+}
+
+function highlightProjectsForTool(projectIds) {
+  if (!projectIds || !projectIds.length) return;
+  clearToolHighlights();
+  const cards = Array.from(document.querySelectorAll(".card"))
+    .filter(card => projectIds.includes(card.dataset.id));
+  if (!cards.length) return;
+  cards.forEach(card => card.classList.add("tool-highlight"));
+  cards[0].scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "center" });
+}
+
+toolboxBadges.addEventListener("click", e => {
+  const badge = e.target.closest(".tool-badge");
+  if (!badge) return;
+  const tool = SOFTWARE_TOOLS[parseInt(badge.dataset.toolIndex, 10)];
+  if (!tool || !tool.projects || !tool.projects.length) return;
+  e.preventDefault();
+  closeToolbox();
+  setTimeout(() => highlightProjectsForTool(tool.projects), 350);
+});
 
 // Preload every frame up front so opening never shows a blank flash.
 let framesReady = false;
@@ -548,6 +655,8 @@ function openToolbox() {
   toolboxToggle.setAttribute("aria-expanded", "true");
   toolboxToggle.setAttribute("aria-label", "Close engineering software toolbox");
   toolboxHint.textContent = "Click to close";
+  // Visitor found it — stop the attention nudge and pulsing dot (CSS).
+  document.getElementById("toolbox").classList.add("is-seen");
   // Box crossfade and badge stagger both key off data-state="open" directly —
   // the CSS transition itself supplies the motion, no JS-timed steps needed.
   setToolboxState("open");
@@ -570,7 +679,61 @@ function closeToolbox() {
   toolboxAnimTimer = setTimeout(() => setToolboxState("closed"), 150);
 }
 
-toolboxToggle.addEventListener("click", () => {
+function toggleToolbox() {
   if (toolboxState === "closed") openToolbox();
   else if (toolboxState === "open") closeToolbox();
+}
+
+toolboxToggle.addEventListener("click", toggleToolbox);
+
+// The box itself is a click target too (mouse only — the button above stays
+// the keyboard/screen-reader control). Badge clicks are handled separately.
+toolboxStage.addEventListener("click", e => {
+  if (e.target.closest(".tool-badge")) return;
+  toggleToolbox();
 });
+
+// ---------------- Scroll reveal ----------------
+// Section headings, cards, and case-study steps fade up as they scroll into
+// view. A MutationObserver picks up anything rendered later (filtered cards,
+// a newly opened case study), so nothing has to remember to opt in. The
+// hidden starting state only applies once this runs (html.js-reveal), so
+// content is never stuck invisible if the script fails.
+const REVEAL_SELECTOR = [
+  ".section-eyebrow", ".section-heading", ".filter-bar", ".card", ".about-photo", ".about-text",
+  ".process-row", ".process-note", ".process-wide", ".process-schedule", ".modal-process-gallery figure",
+  ".modal-process-narrative"
+].join(",");
+
+if (!prefersReducedMotion && "IntersectionObserver" in window) {
+  document.documentElement.classList.add("js-reveal");
+
+  const revealObserver = new IntersectionObserver(entries => {
+    // Stagger whatever enters together (e.g. a row of cards) so it cascades.
+    entries.filter(e => e.isIntersecting).forEach((entry, i) => {
+      const el = entry.target;
+      revealObserver.unobserve(el);
+      el.style.transitionDelay = `${Math.min(i, 5) * 80}ms`;
+      el.classList.add("is-revealed");
+      // Hand the element back to its own styles (hover lifts, transitions)
+      // once it has arrived.
+      setTimeout(() => {
+        el.classList.remove("reveal", "is-revealed");
+        el.style.transitionDelay = "";
+      }, 900 + Math.min(i, 5) * 80);
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+
+  const watchForReveal = root => {
+    root.querySelectorAll(REVEAL_SELECTOR).forEach(el => {
+      if (el.dataset.revealSeen) return;
+      el.dataset.revealSeen = "1";
+      el.classList.add("reveal");
+      revealObserver.observe(el);
+    });
+  };
+
+  watchForReveal(document);
+  new MutationObserver(() => watchForReveal(document))
+    .observe(document.body, { childList: true, subtree: true });
+}
