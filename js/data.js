@@ -596,7 +596,7 @@ const PROJECTS = [
         text: "The thermostat's firmware has several safety features for when something goes wrong, some of them staged across multiple steps. Every one of those had to be verified on two different PCB boards." },
       { heading: "Two boards, two protocols",
         text: "The two boards communicate over different RF signals, Z-Wave and Zigbee, so each one needed its own automation. I built the Z-Wave version in the Z-Wave Compliance Test Tool (CTT), where each test step is sent, checked, and logged as a pass, and the Zigbee version in Python." },
-      { image: "images/experience/firmware-process-terminal-test-log.jpg", wide: true,
+      { image: "images/experience/firmware-process-python-test-log.jpg", wide: true,
         text: "The Python version stepping through a test: sending commands, waiting for reports, and counting the relay notifications that come back before reporting a pass" },
       { heading: "The result",
         text: "Both versions run fully automated and report their own results, making the tests repeatable across both hardware platforms and saving an hour of manual testing per run." }
