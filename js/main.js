@@ -329,10 +329,20 @@ function buildGallery(project) {
 
 let currentGallery = [];
 
+// Anonymous click stats: records "someone opened project X" / "someone
+// clicked tool Y" as GoatCounter events (no cookies, nothing personal).
+// Skipped if the GoatCounter script hasn't loaded or is blocked.
+function trackEvent(path, title) {
+  if (window.goatcounter && typeof window.goatcounter.count === "function") {
+    window.goatcounter.count({ path, title, event: true });
+  }
+}
+
 function openModal(project) {
   openProjectId = project.id;
   syncOpenCardBorder();
   clearToolHighlights();
+  trackEvent(`project/${project.id}`, project.title);
 
   const category = (project.subjects && project.subjects.length)
     ? project.subjects.slice(0, 2).map(s => s.toUpperCase()).join(" / ")
@@ -648,6 +658,7 @@ toolboxBadges.addEventListener("click", e => {
   const badge = e.target.closest(".tool-badge");
   if (!badge) return;
   const tool = SOFTWARE_TOOLS[parseInt(badge.dataset.toolIndex, 10)];
+  if (tool) trackEvent(`tool/${tool.name}`, `Toolbox: ${tool.name}`);
   if (!tool || !tool.projects || !tool.projects.length) return;
   e.preventDefault();
   closeToolbox();
@@ -678,6 +689,7 @@ function setToolboxState(state) {
 function openToolbox() {
   if (toolboxState === "open") return;
   clearTimeout(toolboxAnimTimer);
+  trackEvent("toolbox/opened", "Opened the toolbox");
   toolboxToggle.setAttribute("aria-expanded", "true");
   toolboxToggle.setAttribute("aria-label", "Close engineering software toolbox");
   toolboxHint.textContent = "Click a tool to see the projects I used it in · click the box to close";
