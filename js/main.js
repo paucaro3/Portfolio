@@ -680,7 +680,7 @@ function openToolbox() {
   clearTimeout(toolboxAnimTimer);
   toolboxToggle.setAttribute("aria-expanded", "true");
   toolboxToggle.setAttribute("aria-label", "Close engineering software toolbox");
-  toolboxHint.textContent = "Click to close";
+  toolboxHint.textContent = "Click a tool to see the projects I used it in · click the box to close";
   // Visitor found it — stop the attention nudge and pulsing dot (CSS).
   document.getElementById("toolbox").classList.add("is-seen");
   // Box crossfade and badge stagger both key off data-state="open" directly —
