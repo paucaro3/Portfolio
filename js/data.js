@@ -705,7 +705,7 @@ const PROJECTS = [
     category: "experience",
     title: "Hardware Engineering Intern",
     tagline: "Automated Hardware Validation & Thermal Study · Universal Electronics",
-    thumb: "images/experience/hardware-final-test-platform.jpg",
+    thumb: "images/experience/hardware-final-illustration.jpg",
     dates: "May 2024 – August 2024",
     problem: "Thermostats have to recover on their own from blackouts, brownouts, and voltage swings, and the hardware team needed a way to test that reliably over the long term.",
     role: "Designed and built the test platform, wrote and verified its control scripts, and documented the new power-supply software in an SOP. Also installed humidity control for the test chamber.",
@@ -714,12 +714,12 @@ const PROJECTS = [
       "One set of scripts works across thermostat voltage ratings",
       "SOP lets the team run tests on their own"
     ],
-    finalImages: ["images/experience/hardware-final-test-platform.jpg"],
+    finalImages: ["images/experience/hardware-final-illustration.jpg"],
     process: [
       { heading: "Why reboot reliability matters",
         text: "Thermostats have to come back on by themselves after blackouts, brownouts, and other voltage changes. The hardware team needed long-term reboot reliability data on their devices, so I designed and built a test platform, the power wall, to run those tests automatically." },
-      { image: "images/experience/hardware-process-relay-board.jpg", text: "Routing each thermostat's wire connectors back to the power supply" },
-      { images: ["images/experience/hardware-process-electrical-box-vent.jpg", "images/experience/hardware-process-wire-connectors.jpg"],
+      { image: "images/experience/hardware-process-wire-routing-illustration.jpg", text: "Routing each thermostat's wire connectors back to the power supply" },
+      { image: "images/experience/hardware-process-outlet-connectors-illustration.jpg",
         text: "Outlet box and wire connectors routing power across the wall" },
       { heading: "Writing the test scripts",
         text: "Each control script sets a voltage for a set amount of time. I wrote a full suite: brownout tests at 24V and 30V; a random on/off voltage variation test; on/off tests that cycle 1 s off and 0.1 s on, or 15 s on and 0.05 s off, while stepping up the voltage; and input voltage variation tests using sine and square waves on 12 s ramps, plus one that combines both." },
@@ -738,7 +738,7 @@ const PROJECTS = [
         text: "Applying thermodynamics principles, I experimented with building enclosures to hold the thermostats and give them a more controlled environment inside the chamber, aiming to bring the readings closer together. But a longer soak time was the only change that made a reliable difference. I recommended the soak-time adjustment and left it to the managers to weigh whether the extra time and resources were worth it. Along the way, the team got a much clearer picture of how their tools behave." },
       { heading: "Adding humidity control to the chamber",
         text: "In a separate project, I set up humidity control for the chamber in house, since having someone else install it would have cost more. I installed the relays and did the wiring, plumbed in a filter, water container, and tubing, and contacted the manufacturer directly with questions that came up during installation." },
-      { image: "images/experience/hardware-process-control-panel.jpg", text: "Relays and wiring I installed in the chamber's control panel" }
+      { image: "images/experience/hardware-process-control-panel-illustration.jpg", wide: true, text: "Relays and wiring I installed in the chamber's control panel, plus the water, filter, and tubing for humidity" }
     ],
     tags: ["Hardware Testing", "Power Supply Scripting", "Oscilloscopes", "DAQ", "MATLAB", "DOE"],
     description: `
