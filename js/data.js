@@ -81,7 +81,7 @@ const PROJECTS = [
       "Radial electrode geometry survived pyrolysis intact",
       "COMSOL confirmed thickness as a key amplification lever"
     ],
-    toolsUsed: ["SolidWorks", "CoventorWare", "COMSOL", "Gamry Analyst", "Python"],
+    toolsUsed: ["SolidWorks", "CoventorWare", "COMSOL", "Gamry Analyst", "MATLAB", "Python"],
     heroCaption: "Small sensors. Big possibilities.",
     finalImages: [
       "images/research/thesis-final-smartwatch-integration.jpg",

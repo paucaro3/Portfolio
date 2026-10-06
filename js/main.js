@@ -481,7 +481,10 @@ function openModal(project) {
 
   overlay.classList.add("open");
   document.body.style.overflow = "hidden";
+  // The panel itself (.modal) is the scroll container on desktop, the
+  // overlay on small screens; reset both so every project opens at the top.
   overlay.scrollTop = 0;
+  overlay.querySelector(".modal").scrollTop = 0;
 
   // Videos are injected while the modal is still hidden, so the browser's
   // own autoplay never kicks in, and browsers pause offscreen muted video to

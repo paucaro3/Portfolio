@@ -57,7 +57,7 @@ const SOFTWARE_TOOLS = [
   { name: "MATLAB", mark: "MA", icon: "images/toolbox/software/matlab.jpg",
     skills: ["Data Analysis", "Modeling", "Signal Processing"],
     position: { x: 55, y: 50 },
-    projects: ["hardware-intern"],
+    projects: ["thesis", "hardware-intern"],
     href: null },
   { name: "Arduino", mark: "AR", icon: "images/toolbox/software/arduino.png",
     skills: ["Embedded Prototyping", "Sensors", "Hardware Control"],
