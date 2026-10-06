@@ -32,6 +32,9 @@
                     ] }
                       — a "year at a glance" event list, one column per
                         term; type "Speaker" and "Tour" are highlighted red
+                An `images` step can take `columns: 3` to lay a big set out
+                in a fixed grid instead of one long row, and `labels: [...]`
+                (one per image) to tag each image or clip in its corner.
                 Any image step can also take a `heading` and/or `caption`
                 (handwritten-style label).
   images:       fallback gallery used only if finalImages isn't set (older entries)
@@ -85,29 +88,58 @@ const PROJECTS = [
       "images/research/thesis-final-device-isolated.png",
       "images/research/thesis-process-design-iteration.png"
     ],
-    // Interleaved process content — each step is an image (or paired images)
-    // beside its own short line, in the order and wording Paulette picked
-    // from the thesis defense deck.
+    // Story-style case study: each heading/text section explains the photos
+    // that follow it. Photos and captions are the ones Paulette picked from
+    // her source decks; the sections reuse the project's own write-up.
     process: [
-      { image: "images/research/thesis-process-design-iteration.png", text: "Final Device Iteration" },
+      { heading: "The idea: redox cycling",
+        text: "The concept is a wearable patch on the inner wrist that reads glucose from sweat and sends it to a phone over Bluetooth. Its 3D carbon electrodes are interdigitated: a generator (G) and collector (C) sit side by side, so a molecule reduced (R) at one is oxidized (O) at the other and cycles back and forth, amplifying the signal. Taller electrodes give each molecule more surface to cycle between, so a thicker electrode means more amplification." },
+      { image: "images/research/thesis-process-redox-cycling.mp4", wide: true,
+        text: "Proposed solution: redox cycling between generator and collector electrodes, and how a thicker electrode boosts the amplification" },
+      { image: "images/research/thesis-process-design-specs.png", wide: true,
+        text: "Design specifications I set for the device, from inner-wrist placement and a flexible polyimide substrate to a 10-1000 µM sensing range and 7-14 day wear" },
+      { heading: "Designing the electrode",
+        text: "Iterated the radial electrode geometry (width, layout, thickness) across multiple batches to balance performance, fabrication reliability, and mechanical robustness. Modeled in SOLIDWORKS, drafted masks in CoventorWare, and ran early data analysis in Python." },
+      { image: "images/research/thesis-process-design-inspiration.mp4", wide: true,
+        text: "Design inspiration: La Luna. The moon inspired the first hand-drawn spiral layouts, which evolved into the interdigitated generator-collector spirals" },
+      { image: "images/research/thesis-process-design-evolution.png", wide: true,
+        text: "Design evolution: the La Luna and La Gitana generations led to El Hijo, the final design" },
+      { image: "images/research/thesis-process-design-iteration.png", text: "El Hijo, the final device iteration" },
       { image: "images/research/thesis-process-mask-layout-v2.png", text: "Full Wafer Mask Layout" },
+      { heading: "Fabrication",
+        text: "Fabricated via C-MEMS: SU-8 photolithography pyrolyzed into glassy carbon (biocompatible, conductive), polyimide insulation (a flexible MEMS material), a metal trace layer, a second polyimide layer, and a BHF bath to release devices from the wafer." },
       { image: "images/research/thesis-process-lithography-flow-full.png", text: "Photolithography Process Overview" },
       { image: "images/research/thesis-process-liftoff-sequence.png", text: "BHF Liftoff" },
-      { image: "images/research/thesis-process-testing-setup-single.png", text: "Standard Three-Electrode Setup" },
-      { image: "images/research/thesis-process-testing-setup-dual.png", text: "Dual-Potentiostat Four-Electrode Setup" },
       { image: "images/research/thesis-process-wafer-quarter.png", text: "Quarter Wafer Fabrication" },
       { image: "images/research/thesis-final-device-macro.png", text: "Lifted Device" },
+      { heading: "Testing setup",
+        text: "Characterized the devices with optical microscopy and CV/EIS on a Gamry Analyst, using both a standard three-electrode setup and a dual-potentiostat four-electrode setup, plus a microfluidic housing for testing." },
+      { image: "images/research/thesis-process-testing-setup-single.png", text: "Standard Three-Electrode Setup" },
+      { image: "images/research/thesis-process-testing-setup-dual.png", text: "Dual-Potentiostat Four-Electrode Setup" },
       { image: "images/research/thesis-process-hand-clip.png", text: "Clipped Device for Testing" },
-      { image: "images/research/thesis-final-device-isolated.png", text: "Final Lifted Device" },
-      { images: ["images/research/thesis-process-mask-finger-1.gif", "images/research/thesis-process-mask-finger-2.gif"],
-        text: "The concentration is bigger in the thicker electrodes than the thinner electrodes." },
+      { image: "images/research/thesis-process-microfluidic-render.png", text: "Microfluidic testing housing" },
+      { heading: "Modeling and results",
+        text: "COMSOL modeling showed how electrode thickness affects amplification, and the CV and EIS results below show the scan-rate and concentration behavior at two spin speeds." },
+      { image: "images/research/thesis-results-fea-summary.png", wide: true,
+        text: "FEA results at t = 32 s: ferrocyanide concentration climbs steadily with electrode thickness, from 3.06 × 10⁵ mol/m³ at 75 µm to 5.00 × 10⁵ mol/m³ at 150 µm" },
+      { images: [
+          "images/research/thesis-results-comsol-ferro-75um.mp4",
+          "images/research/thesis-results-comsol-ferro-100um.mp4",
+          "images/research/thesis-results-comsol-ferro-125um.mp4",
+          "images/research/thesis-results-comsol-ferro-150um.mp4"
+        ], columns: 2, wide: true, labels: ["75 µm", "100 µm", "125 µm", "150 µm"],
+        text: "COMSOL simulation of ferrocyanide concentration over time at four electrode thicknesses: the concentration is bigger in the thicker electrodes than the thinner ones" },
       { image: "images/research/thesis-results-cv-3000rpm.jpg", text: "CV response across scan rates at 3000 rpm" },
       { image: "images/research/thesis-results-cv-2000rpm.jpg", text: "CV response across scan rates at 2000 rpm" },
       { image: "images/research/thesis-results-cv-comparison.jpg", text: "2000 vs. 3000 rpm, side by side." },
       { image: "images/research/thesis-results-randles-sevcik.jpg", text: "Randles-Ševčík analysis confirming the reaction is diffusion-controlled." },
       { image: "images/research/thesis-results-eis-2000rpm.jpg", text: "Impedance spectroscopy at 2000 rpm: Nyquist and Bode." },
       { image: "images/research/thesis-results-eis-3000rpm.jpg", text: "Impedance spectroscopy at 3000 rpm: Nyquist and Bode." },
-      { image: "images/research/thesis-process-microfluidic-render.png", text: "Microfluidic testing housing" }
+      { heading: "Outcome",
+        text: "Optimized the electrode geometry, fabrication process, and test criteria for the platform. Functionalizing with glucose oxidase for a fully wearable device is the next step." },
+      { image: "images/research/thesis-process-defense.jpg", text: "Defending my thesis", wide: true },
+      { image: "images/research/thesis-acknowledgements.jpg", wide: true,
+        text: "Acknowledgements: the NSF, my mentors, lab mates, and friends who made this work possible" }
     ],
     tags: ["MEMS Fabrication", "Electrochemistry (CV/EIS)", "COMSOL / FEA", "SOLIDWORKS", "CoventorWare", "Gamry Analyst", "Python"],
     description: `
@@ -122,22 +154,6 @@ const PROJECTS = [
       especially for prediabetes management and pediatric diabetes care,
       where less-invasive daily monitoring matters most.</p>
     `,
-    processDescription: `
-      <p>Iterated the radial electrode geometry (width, layout, thickness)
-      across multiple batches to balance performance, fabrication
-      reliability, and mechanical robustness. Modeled in SOLIDWORKS, drafted masks
-      in CoventorWare, and ran early data analysis in Python.</p>
-      <p>Fabricated via C-MEMS: SU-8 photolithography pyrolyzed into glassy
-      carbon (biocompatible, conductive), polyimide insulation (a flexible
-      MEMS material), a metal trace layer, a second polyimide layer, and a
-      BHF bath to release devices from the wafer.</p>
-      <p>Characterized with optical microscopy, CV/EIS on a Gamry Analyst,
-      and COMSOL modeling of electrode-thickness effects (see the plots
-      below for the scan-rate and concentration results).</p>
-      <p><em>Outcome:</em> optimized the electrode geometry, fabrication
-      process, and test criteria for the platform. Functionalizing with
-      glucose oxidase for a fully wearable device is the next step.</p>
-    `,
     links: [
       // EDIT ME: add the poster PDF once you locate/export it — link label
       // e.g. { label: "View Poster (PDF)", url: "thesis-poster.pdf" }
@@ -151,7 +167,7 @@ const PROJECTS = [
     tagline: "Suspension Lead, Team STORM, SDSU Senior Design (ME491), sponsored by Aztec Baja Racing",
     thumb: "https://img.youtube.com/vi/Hz4xkZ26YT0/hqdefault.jpg",
     dates: "August 2024 – May 2025",
-    teamPhoto: "images/engineering/suspension-final-arizona-team.jpg",
+    teamPhoto: "images/engineering/suspension-final-design-team.jpg",
     teamSize: "5-person team; suspension lead (not overall team lead)",
     myRole: "Suspension lead",
     problem: "Baja drivers needed adjustable damping to handle rough terrain without sacrificing comfort, plus a tighter turning radius for a better competition score.",
@@ -168,29 +184,59 @@ const PROJECTS = [
       "images/engineering/suspension-full-car.jpg",
       "images/engineering/suspension-pov-drive.jpg"
     ],
-    // Interleaved process content — order, grouping, and wording picked by
-    // Paulette via the clickable slide-picker across the four source decks.
+    // Story-style case study: each heading/text section explains the photos
+    // that follow it. Photos and captions are the ones Paulette picked from
+    // her source decks; the sections reuse the project's own write-up.
     process: [
+      { heading: "Planning the project",
+        text: "As suspension lead on a 5-person team, I mapped out the system, the schedule, and the budget before any parts were made." },
+      { image: "images/engineering/suspension-process-system-diagram.png", text: "System diagram" },
+      { images: [
+          "images/engineering/suspension-process-gantt-chart.png",
+          "images/engineering/suspension-process-budget-overview.png"
+        ], text: "Gantt chart and budget overview" },
+      { heading: "Designing the front suspension",
+        text: "A double-wishbone front suspension with 10 inches of vertical wheel travel, built from 4130 chromoly and 6061-T6 aluminum at 14.7 lb total, with geometry redesigned for a tighter turning radius." },
       { image: "images/engineering/suspension-process-exploded-view.png", text: "Exploded view of front suspension" },
       { image: "images/engineering/suspension-process-assembly-integration.png", text: "Front suspension assembly integration" },
       { image: "images/engineering/suspension-process-labeled-assembly.png", text: "Labeled assembly" },
-      { image: "images/engineering/suspension-final-assembly.jpg", text: "Finished assembly" },
-      { image: "images/engineering/suspension-process-upright-fea.png", text: "Upright FEA" },
-      { image: "images/engineering/suspension-process-final-upright-fea.png", text: "Final upright FEA" },
-      { image: "images/engineering/suspension-process-lower-control-arm.png", text: "Lower control arm" },
-      { image: "images/engineering/suspension-process-lower-control-arm-fea.png", text: "Lower control arm FEA" },
-      { image: "images/engineering/suspension-process-electronics-test-stand.gif", text: "Electronics test stand" },
-      { image: "images/engineering/suspension-process-electronics-stiffness-results.png", text: "Electronics test stand results measuring stiffness" },
-      { image: "images/engineering/suspension-process-gantt-chart.png", text: "Gantt Chart" },
-      { image: "images/engineering/suspension-process-budget-overview.png", text: "Budget Overview" },
-      { image: "images/engineering/suspension-process-system-diagram.png", text: "System diagram" },
-      { images: ["images/engineering/suspension-process-physical-testing-1.gif", "images/engineering/suspension-process-physical-testing-2.gif"],
-        text: "Physical testing" },
+      { heading: "Checking it with FEA",
+        text: "Before anything was machined, the upright and lower control arm were analyzed with FEA." },
+      { images: [
+          "images/engineering/suspension-process-upright-fea.png",
+          "images/engineering/suspension-process-final-upright-fea.png"
+        ], text: "Upright FEA, and the final upright FEA" },
+      { images: [
+          "images/engineering/suspension-process-lower-control-arm.png",
+          "images/engineering/suspension-process-lower-control-arm-fea.png"
+        ], text: "Lower control arm and its FEA" },
+      { heading: "Building it",
+        text: "Machined and integrated the suspension, using welding fixtures to hold the upper and lower control arms in place." },
+      { images: [
+          "images/engineering/suspension-process-welding-fixture-upper.jpg",
+          "images/engineering/suspension-process-welding-fixture-lower.jpg"
+        ], text: "Welding fixtures for the upper and lower control arms" },
       { image: "images/engineering/suspension-process-front-suspension-view.jpg", text: "Front suspension view" },
-      { image: "images/engineering/suspension-process-welding-fixture-upper.jpg", text: "Welding fixtures for upper control arm" },
-      { image: "images/engineering/suspension-process-welding-fixture-lower.jpg", text: "Welding fixtures for lower control arm" },
-      { image: "images/engineering/suspension-process-electronics-initial.jpg", text: "Initial electronics for user based dampening" },
-      { image: "images/engineering/suspension-process-electronics-final.png", text: "Final electronics for user based dampening" }
+      { image: "images/engineering/suspension-final-assembly.jpg", text: "Finished assembly" },
+      { heading: "Driver-adjustable damping",
+        text: "Steering wheel buttons are wired to an Arduino Nano that triggers solenoids on the shocks, so drivers can switch the 2-position damper in real time." },
+      { images: [
+          "images/engineering/suspension-process-electronics-initial.jpg",
+          "images/engineering/suspension-process-electronics-final.png"
+        ], text: "Initial and final electronics for user based dampening" },
+      { images: [
+          "images/engineering/suspension-process-electronics-test-stand.gif",
+          "images/engineering/suspension-process-electronics-stiffness-results.png"
+        ], text: "Electronics test stand, and its results measuring stiffness" },
+      { heading: "Testing in the desert",
+        text: "Tested for 48 combined hours over two weekends, including 2-foot drops and \"whoops\" terrain." },
+      { images: [
+          "images/engineering/suspension-process-physical-testing-1.gif",
+          "images/engineering/suspension-process-physical-testing-2.gif"
+        ], text: "Physical testing" },
+      { heading: "Competition",
+        text: "The team leads presented the finished suspension at the Arizona SAE Baja competition, where the car placed 2nd in sled pull." },
+      { image: "images/engineering/suspension-final-arizona-team.jpg", text: "The competition team at Arizona SAE Baja" }
     ],
     tags: ["SOLIDWORKS", "FEA", "Arduino", "Manufacturing", "Testing & Validation"],
     description: `
@@ -221,7 +267,7 @@ const PROJECTS = [
     tagline: "Research Project, NanoFAB.SDSU. Presented at the SDSU Spring Symposium and the CMEMS Conference at the University of Miami",
     thumb: "images/research/epilepsy-final-concept.jpg",
     dates: "October 2024 – March 2025",
-    teamPhoto: "images/research/epilepsy-final-team-picture.jpg",
+    teamPhoto: "images/research/epilepsy-final-symposium-team.jpg",
     teamSize: "Led a team of 4",
     myRole: "Team lead",
     problem: "Existing VNS therapy for epilepsy is open-loop: it stimulates on a fixed schedule rather than responding to what's happening in the body, limiting how precise or personalized it can be.",
@@ -239,32 +285,52 @@ const PROJECTS = [
       "images/research/epilepsy-final-wafer-1.jpg",
       "images/research/epilepsy-final-wafer-2.jpg"
     ],
-    // Interleaved process content — order, grouping, and wording picked by
-    // Paulette via the clickable slide-picker across all three source decks.
+    // Story-style case study: each heading/text section explains the photos
+    // that follow it. Photos and captions are the ones Paulette picked from
+    // her source decks; the sections reuse the project's own write-up.
     process: [
+      { heading: "The concept",
+        text: "BioAura is a closed-loop cuff that wraps around the vagus nerve, senses glutamate and lactate, and triggers stimulation in response instead of on a fixed schedule." },
       { image: "images/research/epilepsy-final-concept.jpg", text: "Device concept" },
       { image: "images/research/epilepsy-process-cuff-wrap-mechanism.gif", text: "Device wrap mechanism" },
       { image: "images/research/epilepsy-process-full-device-concept.jpg", text: "Full device concept" },
+      { images: [
+          "images/research/epilepsy-process-closed-loop-diagram.png",
+          "images/research/epilepsy-process-system-diagram.png"
+        ], text: "Closed loop diagram and system diagram" },
+      { heading: "Designing for the vagus nerve",
+        text: "The cuff is sized to the nerve's actual anatomy (2.0-3.5 mm diameter, 6.3-11 mm circumference) and went through 3 design iterations, from early sketches to a final 4-electrode design." },
       { image: "images/research/epilepsy-process-vagus-nerve-anatomy.png", text: "Vagus nerve description" },
-      { image: "images/research/epilepsy-process-fabrication-materials.png", text: "Device fabrication materials and process" },
-      { image: "images/research/epilepsy-process-initial-design.png", text: "Initial design" },
-      { images: ["images/research/epilepsy-process-ansys-stress-1.png", "images/research/epilepsy-process-ansys-stress-2.png"],
-        text: "Ansys stress simulation" },
-      { image: "images/research/epilepsy-process-gantt-chart.png", text: "Gantt chart" },
-      { image: "images/research/epilepsy-process-quarter-wafer.png", text: "Quarter wafer overview" },
-      { image: "images/research/epilepsy-process-mask-layout-full.png", text: "Full mask layout" },
-      { image: "images/research/epilepsy-final-team-picture.jpg", text: "Team picture" },
-      { image: "images/research/epilepsy-process-closed-loop-diagram.png", text: "Closed loop diagram" },
-      { image: "images/research/epilepsy-process-system-diagram.png", text: "System diagram" },
       { images: [
           "images/research/epilepsy-process-initial-concept-1.jpg",
           "images/research/epilepsy-process-initial-concept-2.jpg",
           "images/research/epilepsy-process-initial-concept-3.jpg"
         ], text: "Initial design concepts" },
+      { image: "images/research/epilepsy-process-initial-design.png", text: "Initial design" },
       { image: "images/research/epilepsy-final-device-design.png", text: "Final device design" },
+      { heading: "Modeling stress",
+        text: "FEA in ANSYS modeled bending-moment loading on the flexible cuff (horizontal and vertical) to characterize stress and deformation under implantation-relevant loads." },
+      { images: [
+          "images/research/epilepsy-process-ansys-stress-1.png",
+          "images/research/epilepsy-process-ansys-stress-2.png"
+        ], text: "Ansys stress simulation" },
+      { heading: "Fabrication",
+        text: "Fabrication follows a 4-layer C-MEMS process on a silicon oxide wafer: SU8-10 patterned and pyrolyzed into glassy carbon electrodes, polyimide insulation, a titanium/platinum metal layer for the electrical traces, and a second polyimide layer, before a buffered hydrofluoric acid wet-etch releases the finished devices from the wafer. The 4-layer process stack was built and masked in CoventorWare." },
+      { image: "images/research/epilepsy-process-fabrication-materials.png", text: "Device fabrication materials and process" },
       { image: "images/research/epilepsy-process-fabrication-exploded.png", text: "Exploded fabrication layer by layer view" },
+      { image: "images/research/epilepsy-process-quarter-wafer.png", text: "Quarter wafer overview" },
+      { image: "images/research/epilepsy-process-mask-layout-full.png", text: "Full mask layout" },
+      { heading: "Stimulation and testing",
+        text: "Closed-loop stimulation parameters were scoped against FDA limits: current (0.25-3.5 mA vs. a 12 mA limit), pulse width (250-500 µs), frequency (30 Hz vs. a 145 Hz limit), and a 30-second-on / 5-minute-off duty cycle. Next steps: in vitro electrochemical testing of the sensing electrodes, defining closed-loop stimulation thresholds, and eventual testing in animal models." },
       { image: "images/research/epilepsy-process-testing-setup-single.jpg", text: "Three electrode electrochemistry setup" },
-      { image: "images/research/epilepsy-process-testing-setup-closed-loop.png", text: "Closed loop electrochemistry setup" }
+      { image: "images/research/epilepsy-process-testing-setup-closed-loop.png", text: "Closed loop electrochemistry setup" },
+      { images: [
+          "images/research/epilepsy-process-gantt-chart.png",
+          "images/research/epilepsy-final-team-picture.jpg"
+        ], text: "Project timeline, and the team" },
+      { heading: "Presenting at CMEMS",
+        text: "Presented the initial BioAura concepts at the 2025 CMEMS conference." },
+      { image: "images/research/epilepsy-process-cmems-2025.jpg", wide: true, text: "Presenting the initial concepts at the 2025 CMEMS conference" }
     ],
     tags: ["MEMS Fabrication", "Neurostimulation", "FEA (ANSYS)", "Closed-Loop Systems"],
     description: `
@@ -285,24 +351,6 @@ const PROJECTS = [
       implantation and speeds recovery, and rounding edges for strength and
       comfort.</p>
     `,
-    processDescription: `
-      <p>Fabrication follows a 4-layer C-MEMS process on a silicon oxide
-      wafer: SU8-10 patterned and pyrolyzed into glassy carbon electrodes,
-      polyimide insulation, a titanium/platinum metal layer for the
-      electrical traces, and a second polyimide layer, before a buffered
-      hydrofluoric acid wet-etch releases the finished devices from the
-      wafer.</p>
-      <p>On the mechanical side, FEA in ANSYS modeled bending-moment loading
-      on the flexible cuff (horizontal and vertical) to characterize stress
-      and deformation under implantation-relevant loads, while Coventorware
-      built and masked the 4-layer process stack. Closed-loop stimulation
-      parameters were scoped against FDA limits: current (0.25-3.5 mA vs. a
-      12 mA limit), pulse width (250-500 µs), frequency (30 Hz vs. a 145 Hz
-      limit), and a 30-second-on / 5-minute-off duty cycle.</p>
-      <p>Next steps: in vitro electrochemical testing of the sensing
-      electrodes, defining closed-loop stimulation thresholds, and eventual
-      testing in animal models.</p>
-    `,
     links: []
   },
   {
@@ -310,7 +358,7 @@ const PROJECTS = [
     category: "research",
     subjects: ["devices", "research"],
     title: "MEMS Cuff Electrode for Vagus Nerve Stimulation in Diabetes Management",
-    tagline: "Research Project, NanoFAB.SDSU · SDSU Spring Symposium & a U.S.-Mexico border health conference · Undergraduate Research Excellence Award",
+    tagline: "Research Project, NanoFAB.SDSU · SDSU Spring Symposium & SDSU Re:Border conference · Undergraduate Research Excellence Award",
     thumb: "images/research/diabetes-final-device.jpg",
     dates: "May 2023 – March 2025",
     teamPhoto: "images/research/diabetes-final-cleanroom-team.jpg",
@@ -329,25 +377,46 @@ const PROJECTS = [
       "images/research/diabetes-final-wafer-2.jpg",
       "images/research/diabetes-final-mounted.jpg"
     ],
-    // Interleaved process content — order, grouping, and wording picked by
-    // Paulette via the clickable slide-picker across all three source decks.
+    // Story-style case study: each heading/text section explains the photos
+    // that follow it. Photos and captions are the ones Paulette picked from
+    // her source decks; the sections reuse the project's own write-up.
     process: [
+      { heading: "The idea",
+        text: "Vagus nerve stimulation can enhance insulin sensitivity, so this project designed a flexible cuff electrode to deliver it, sized to the vagus nerve with a built-in locking mechanism." },
       { image: "images/research/diabetes-process-device-concept.jpg", text: "Device concept" },
+      { heading: "Version 1",
+        text: "The first design went from layout to a full mask, then was fabricated, lifted from the wafer, and set up for electrochemical testing." },
       { image: "images/research/diabetes-process-design-v1.png", text: "Design V1" },
       { image: "images/research/diabetes-process-v1-mask-layout.png", text: "V1 full mask layout" },
-      { image: "images/research/diabetes-process-electrochemistry-setup.png", text: "Electrochemistry setup" },
       { image: "images/research/diabetes-process-lifted-devices.png", text: "Lifted devices" },
-      { images: ["images/research/diabetes-process-design-v2-1.png", "images/research/diabetes-process-design-v2-2.png"],
-        text: "Design V2" },
-      { images: ["images/research/diabetes-process-design-v3-1.png", "images/research/diabetes-process-design-v3-2.jpg"],
-        text: "Design V3" },
+      { image: "images/research/diabetes-process-electrochemistry-setup.png", text: "Electrochemistry setup" },
+      { heading: "Refining the design",
+        text: "Two refined variants followed (3-electrode and 4-electrode versions), including a cuffing and locking mechanism to hold the device in place on the nerve." },
+      { images: [
+          "images/research/diabetes-process-design-v2-1.png",
+          "images/research/diabetes-process-design-v2-2.png"
+        ], text: "Design V2" },
+      { images: [
+          "images/research/diabetes-process-design-v3-1.png",
+          "images/research/diabetes-process-design-v3-2.jpg"
+        ], text: "Design V3" },
       { image: "images/research/diabetes-process-v2-fabricated.png", text: "V2 fabricated device" },
       { image: "images/research/diabetes-process-v2-lifted.png", text: "V2 lifted device" },
       { image: "images/research/diabetes-process-v2-cuffing-lock.jpg", text: "V2 cuffing and locking mechanism" },
+      { heading: "Electrochemical testing",
+        text: "The fabricated devices were characterized with EIS and with CV in PBS." },
       { image: "images/research/diabetes-results-eis.png", text: "EIS results" },
       { image: "images/research/diabetes-results-cv-pbs.png", text: "CV results in PBS" },
+      { heading: "In vivo",
+        text: "The final design was tested in an initial in vivo mouse implantation, a step further than most of my other bioelectronics work, which stopped at bench characterization." },
       { image: "images/research/diabetes-process-mouse-implant-schematic.png", text: "Mouse implantation schematic" },
-      { image: "images/research/diabetes-final-mouse-implant-v3.jpg", text: "Mouse implantation with V3 prototype" }
+      { image: "images/research/diabetes-final-mouse-implant-v3.jpg", text: "Mouse implantation with V3 prototype" },
+      { heading: "Presenting the work",
+        text: "Presented the project at SDSU's Re:Border conference in October 2024, making the cost and accessibility case for both the U.S. and Mexico. A second team later took the project further, and I presented the work alongside them, walking through our fabrication results." },
+      { image: "images/research/diabetes-process-reborder-conference.jpg", wide: true,
+        text: "Presenting the fabrication process at the SDSU Re:Border conference, October 2024" },
+      { image: "images/research/diabetes-process-presenting-second-team.jpg", wide: true,
+        text: "Presenting the fabrication results with the second team who took on the project" }
     ],
     tags: ["MEMS Fabrication", "Vagus Nerve Stimulation", "EIS / CV Characterization", "In Vivo Testing"],
     description: `
@@ -369,8 +438,8 @@ const PROJECTS = [
       characterization.</p>
       <p>Presented this work with several different collaborator teams,
       including at the SDSU Spring Research Symposium (where it won an
-      undergraduate research excellence award) and a U.S.-Mexico border
-      health conference framing the cost and accessibility case for both
+      undergraduate research excellence award) and SDSU's Re:Border conference
+      (October 2024), framing the cost and accessibility case for both
       countries.</p>
     `,
     links: []
@@ -443,13 +512,16 @@ const PROJECTS = [
       "images/research/prosthetic-final-k2-render.jpg",
       "images/research/prosthetic-final-bracket.jpg"
     ],
-    // Interleaved process content — order, grouping, and wording picked by
-    // Paulette via the clickable slide-picker on the LIMBER Prosthetics deck.
+    // Story-style case study: each heading/text section explains the photos
+    // that follow it. Photos and captions are the ones Paulette picked from
+    // her source decks; the sections reuse the project's own write-up.
     process: [
-      { image: "images/research/prosthetic-process-printed-prototype-1.jpg", text: "3D printed prototype" },
-      { image: "images/research/prosthetic-process-printed-prototype-2.jpg", text: "3D printed prototype (link)" },
+      { heading: "Inspiration and research",
+        text: "Looked to biomimicry and the literature: the seahorse tail's square, segmented structure, and existing linkage systems." },
       { image: "images/research/prosthetic-process-seahorse-inspiration.png", text: "Seahorse inspired design" },
       { image: "images/research/prosthetic-process-literature-review.png", text: "Literature review for linkage system" },
+      { heading: "Early concepts",
+        text: "Iterated from early hand-drawn concepts through CAD modeling in SOLIDWORKS to a final printed and assembled prototype." },
       { images: [
           "images/research/prosthetic-process-initial-concept-1.jpg",
           "images/research/prosthetic-process-initial-concept-2.jpg",
@@ -463,8 +535,9 @@ const PROJECTS = [
           "images/research/prosthetic-process-movement-idea-1.png",
           "images/research/prosthetic-process-movement-idea-2.jpg"
         ], text: "Movement understanding ideas" },
-      { image: "images/research/prosthetic-process-formlabs-printer.png", text: "Formlabs resin printer" },
       { image: "images/research/prosthetic-process-gantt-chart.png", text: "Gantt chart" },
+      { heading: "CAD design",
+        text: "Modeled the linkage and its outer protection in SOLIDWORKS, then built up the inner and full assemblies." },
       { image: "images/research/prosthetic-process-linkage-concept.png", text: "Linkage concept" },
       { image: "images/research/prosthetic-process-linkage-dimensions.png", text: "Rough linkage dimensions" },
       { image: "images/research/prosthetic-process-outer-protection-assembly.png", text: "Outer protection assembly" },
@@ -483,7 +556,14 @@ const PROJECTS = [
       { images: [
           "images/research/prosthetic-process-full-assembly-1.png",
           "images/research/prosthetic-process-full-assembly-2.png"
-        ], text: "Full assembly" }
+        ], text: "Full assembly" },
+      { heading: "Printing and tolerancing",
+        text: "The first print run's connecting rod was toleranced -0.2 in from baseline and fit too loosely; a tighter -0.1 in reprint didn't fit at all, so we landed on -0.15 in as the corrected tolerance for a secure fit, along with follow-up fixes to how the hinge attachment holes and spring-retention features were positioned." },
+      { image: "images/research/prosthetic-process-formlabs-printer.png", text: "Formlabs resin printer" },
+      { image: "images/research/prosthetic-process-printed-prototype-1.jpg", text: "3D printed prototype" },
+      { image: "images/research/prosthetic-process-printed-prototype-2.jpg", text: "3D printed prototype (link)" },
+      { heading: "A later phase: K2 analysis",
+        text: "A later phase of this work, run with a different team under the framing of Medicare's K2 ambulation classification, took a more traditional engineering-analysis approach: three hinge-and-foam heel designs were modeled and evaluated with FEA in SOLIDWORKS across the stance and toe-off phases of gait. The first design showed stress concentrations at the heel exceeding the material's yield strength; adding a hinge and an EVA foam insert (Design Two), then a second heel hinge to improve load transfer (Design Three), progressively smoothed out those stress concentrations and reduced peak strain." }
     ],
     tags: ["3D Printing", "Biomimicry", "SOLIDWORKS", "FEA"],
     description: `
@@ -503,24 +583,6 @@ const PROJECTS = [
       mix of gliding, peg-and-socket, and ball-and-socket joints) into a
       3D-printed hinge linking the printed leg to the foot, giving passive
       ankle articulation with no added hardware.</p>
-    `,
-    processDescription: `
-      <p>Iterated from early hand-drawn concepts through CAD modeling in
-      SOLIDWORKS to a final printed and assembled prototype. The first print
-      run's connecting rod was toleranced -0.2 in from baseline and fit too
-      loosely; a tighter -0.1 in reprint didn't fit at all, so we landed on
-      -0.15 in as the corrected tolerance for a secure fit, along with
-      follow-up fixes to how the hinge attachment holes and spring-retention
-      features were positioned.</p>
-      <p>A later phase of this work, run with a different team under the
-      framing of Medicare's K2 ambulation classification, took a more
-      traditional engineering-analysis approach: three hinge-and-foam heel
-      designs were modeled and evaluated with FEA in SOLIDWORKS across the
-      stance and toe-off phases of gait. The first design showed stress
-      concentrations at the heel exceeding the material's yield strength;
-      adding a hinge and an EVA foam insert (Design Two), then a second heel
-      hinge to improve load transfer (Design Three), progressively smoothed
-      out those stress concentrations and reduced peak strain.</p>
     `,
     links: []
   },
@@ -542,26 +604,53 @@ const PROJECTS = [
     ],
     process: [
       { heading: "Mask layouts, wafer by wafer",
-        text: "Each semester, every researcher's electrode, insulation, and metal layers were combined into four final layers on a shared 4-inch wafer, with each design fit to a quarter or half wafer." },
-      { image: "images/experience/lab-manager-process-wafer-batch.jpg", text: "A semester's quarter-wafer designs" },
+        text: "For every mask order (several each semester), researchers' electrode, insulation, and metal layers were combined into four final layers on a shared 4-inch wafer, with each design fit to a quarter or half wafer." },
       { images: [
+          "images/experience/lab-manager-process-wafer-batch.jpg",
           "images/experience/lab-manager-process-wafer-macro-1.jpg",
           "images/experience/lab-manager-process-wafer-macro-2.jpg",
           "images/experience/lab-manager-process-wafer-macro-3.jpg"
-        ], text: "Up close under the cleanroom's yellow light", wide: true },
+        ], text: "Physical masks, up close under the cleanroom's yellow light", wide: true },
+      { heading: "Every mask order, laid out",
+        text: "These are the full layouts I put together for each mask order from Summer 2023 to Spring 2026. Each circle is a 4-inch wafer, with quarter- and half-wafer designs from different researchers combined onto it." },
+      { images: [
+          "images/experience/lab-manager-process-mask-layout-summer-2023.png",
+          "images/experience/lab-manager-process-mask-layout-spring-2024.png",
+          "images/experience/lab-manager-process-mask-layout-summer-2024.png",
+          "images/experience/lab-manager-process-mask-layout-spring-2025-order-1a.png",
+          "images/experience/lab-manager-process-mask-layout-spring-2025-order-1b.png",
+          "images/experience/lab-manager-process-mask-layout-spring-2025-order-2.png",
+          "images/experience/lab-manager-process-mask-layout-summer-2025.png",
+          "images/experience/lab-manager-process-mask-layout-fall-2025.png",
+          "images/experience/lab-manager-process-mask-layout-spring-2026.png"
+        ], columns: 3, wide: true,
+        text: "Full mask layouts for every order, Summer 2023 through Spring 2026" },
       { heading: "Training new researchers",
-        text: "Co-managed cleanroom training with two other lab managers using a shadow → practice → exam pipeline: new researchers shadowed a fabrication process twice, practiced it twice with support, then passed both a hands-on practical and a written exam before working independently." },
+        text: "Each semester brought new trainees. Every student from the ME 499 and ME 685 courses was new to the lab, along with a good number of new bachelor's students, and each had their own schedule and certification goal. Levels ranged from Level 1 safety training to Level 2 tools like the Hirox 3D microscope and single-layer lithography, up to Level 3+ specialties like electrochemistry and microfluidics. Alongside them, I also tracked NanoFAB's master's and PhD researchers, a partner lab, and visiting scientists." },
+      { heading: "Scheduling and tracking it all",
+        text: "Co-managed training with two other lab managers using a shadow, practice, then exam pipeline: new researchers shadowed a fabrication process twice, practiced it twice with support, then passed both a hands-on practical and a written exam before working independently. To fit everyone in, I used a When2meet to find the days and times that worked for the most people and scheduled trainings around them, then tracked every trainee's progress step by step in a shared spreadsheet." },
+      { image: "images/experience/lab-manager-process-training-tracker-1.jpg", wide: true,
+        text: "Training tracker for one semester (names blurred): each row is a trainee, moving left to right from safety basics through shadowing, practice, and the final exam" },
+      { image: "images/experience/lab-manager-process-training-tracker-2.jpg", wide: true,
+        text: "Another semester's tracker, with ME 499 and ME 685 students joining NanoFAB's own researchers" },
       { heading: "Design meetings and research culture",
         text: "Ran weekly design meetings supporting multiple concurrent researcher projects per semester, helping each team scope a starting layout, feature sizes, and wafer constraints. Also presented my own research at the SDSU Student Research Symposium (S3), part of the broader NanoFAB research culture this role supported." },
+      { heading: "Getting the lab ready for the symposiums",
+        text: "Helped members find their research groups and prepare for two symposiums each year: the Graduate Research Symposium (GRS) in the fall, presented as posters, and SDSU's Student Research Symposium (S3) in the spring, presented as 10 minute talks. I created the presentations that walked the lab through what each symposium involved, from abstract requirements to registration deadlines, and placed students into research teams at our meetings, pairing undergraduates with graduate leads." },
+      { images: ["images/experience/lab-manager-process-symposium-grs-info.jpg", "images/experience/lab-manager-process-symposium-s3-info.jpg"],
+        text: "Slides I made for the lab covering GRS and S3", wide: true },
+      { images: ["images/experience/lab-manager-process-symposium-group-topics-1.jpg", "images/experience/lab-manager-process-symposium-group-topics-2.jpg"],
+        text: "The research teams students were placed into, from microfluidics and energy storage to a BioFET and cochlear implants", wide: true },
       { image: "images/experience/lab-manager-process-symposium.jpg", text: "2025 Engineering Graduate Research Symposium" },
       { image: "images/experience/lab-manager-process-mrs-conference.jpg", text: "At the Materials Research Society (MRS) conference" },
+      { image: "images/research/epilepsy-process-cmems-2025.jpg", text: "Presenting the initial BioAura concepts at the 2025 CMEMS conference" },
       { images: ["images/experience/lab-manager-process-reception.jpg", "images/experience/lab-manager-process-team-dinner.jpg"],
-        text: "Celebrating with the team" }
+        text: "At the 2025 CMEMS conference in Miami, and a lab social back in 2021" }
     ],
     tags: ["Mask Layout", "MEMS Fabrication", "Cleanroom Processing", "Process Improvement", "SOPs"],
     description: `
       <p>Compiled researchers' individual device designs into complete,
-      fabrication-ready mask layouts each semester, combining every
+      fabrication-ready mask layouts for every mask order, combining every
       project's electrode, insulation, and metal layers into four final
       layers on a shared 4-inch wafer (each design fit to a quarter or half
       wafer), then handing off GDS files to an external mask vendor for
@@ -579,8 +668,8 @@ const PROJECTS = [
   {
     id: "firmware-intern",
     category: "experience",
-    title: "Automated Firmware Relay Validation",
-    tagline: "Firmware Engineering Intern, Universal Electronics",
+    title: "Firmware Engineering Intern",
+    tagline: "Automated Firmware Relay Validation · Universal Electronics",
     thumb: "images/experience/firmware-process-zwave-ctt-results.jpg",
     dates: "May 2025 – August 2025",
     problem: "A smart thermostat's safety mitigation tests had to be run by hand on two different PCB boards, and each board talks over a different RF protocol.",
@@ -616,8 +705,8 @@ const PROJECTS = [
   {
     id: "hardware-intern",
     category: "experience",
-    title: "Automated Hardware Validation & Thermal Study",
-    tagline: "Hardware Engineering Intern, Universal Electronics",
+    title: "Hardware Engineering Intern",
+    tagline: "Automated Hardware Validation & Thermal Study · Universal Electronics",
     thumb: "images/experience/hardware-final-test-platform.jpg",
     dates: "May 2024 – August 2024",
     problem: "Thermostats have to recover on their own from blackouts, brownouts, and voltage swings, and the hardware team needed a way to test that reliably over the long term.",
@@ -705,7 +794,7 @@ const PROJECTS = [
     subjects: ["mechanics", "fabrication"],
     title: "High-Power Rocket Build & Launch: LOC IV",
     tagline: "LOC Precision IV airframe, AeroTech 29/54mm DMS motor",
-    thumb: "images/engineering/rocket-final-launch-poster.jpg",
+    thumb: "images/engineering/rocket-final-solo-standing.jpg",
     dates: "June 2025 – August 2025",
     teamPhoto: "images/engineering/rocket-final-team-group.jpg",
     finalImages: [
@@ -713,12 +802,17 @@ const PROJECTS = [
       "images/engineering/rocket-final-solo-standing.jpg",
       "images/engineering/rocket-final-shoulder-carry.jpg"
     ],
-    // Interleaved process content — real prep-day photos and video Paulette
-    // shared, paired with the existing build-sequence narrative below.
+    // Story-style case study: each heading/text section explains the photos
+    // that follow it. Photos and captions are the ones Paulette picked from
+    // her source decks; the sections reuse the project's own write-up.
     process: [
+      { heading: "Building the rocket",
+        text: "Assembly followed the standard high-power build sequence: epoxied the aft, mid, and forward centering rings onto the 38mm motor tube, decided on motor retention hardware before committing the aft centering ring in place, mounted rail buttons for the launch rail, and packed the parachute and shock cord for recovery." },
       { image: "images/engineering/rocket-process-group-prep.jpg", text: "Prepping the rocket before launch" },
       { image: "images/engineering/rocket-process-group-prep-back.jpg", text: "Getting the recovery gear ready" },
       { image: "images/engineering/rocket-process-gear-closeup.jpg", text: "Parachute and shock cord laid out" },
+      { heading: "Launch day",
+        text: "Motor prep followed AeroTech's DMS procedure at the pad: set the ejection delay with the drill tool, loaded the black-powder ejection charge, and installed the igniter immediately before flight per range safety procedure." },
       { image: "images/engineering/rocket-process-prep-video.mp4", text: "Final prep at the pad" },
       { image: "images/engineering/rocket-process-launch-stand.jpg", text: "On the launch rail, ready to fly" }
     ],
@@ -733,24 +827,13 @@ const PROJECTS = [
       rather than leaving it bare, then flew it at a desert high-power
       launch alongside other club rockets.</p>
     `,
-    processDescription: `
-      <p>Assembly followed the standard high-power build sequence: epoxied
-      the aft, mid, and forward centering rings onto the 38mm motor tube,
-      decided on motor retention hardware before committing the aft
-      centering ring in place, mounted rail buttons for the launch rail, and
-      packed the parachute and shock cord for recovery.</p>
-      <p>Motor prep followed AeroTech's DMS procedure at the pad: set the
-      ejection delay with the drill tool, loaded the black-powder ejection
-      charge, and installed the igniter immediately before flight per range
-      safety procedure.</p>
-    `,
     links: []
   },
   {
     id: "syringe-pump",
     category: "engineering",
     subjects: ["devices", "mechanics"],
-    title: "60cc Don't Email Me: Microcontroller-Driven Syringe Pump",
+    title: "Microcontroller-Driven Syringe Pump",
     tagline: "ME 683: Design of Medical Devices, SDSU",
     thumb: "images/engineering/syringe-final-full-setup.jpg",
     dates: "February 2026 – March 2026",
@@ -799,8 +882,8 @@ const PROJECTS = [
   {
     id: "bmes",
     category: "leadership",
-    title: "Biomedical Engineering Society (BMES)",
-    tagline: "Vice President, SDSU",
+    title: "Vice President",
+    tagline: "Biomedical Engineering Society (BMES), SDSU",
     thumb: "images/leadership/bmes-final-masimo-group.jpg",
     dates: "June 2024 – May 2026",
     finalImages: [
@@ -894,8 +977,8 @@ const PROJECTS = [
   {
     id: "asme",
     category: "leadership",
-    title: "American Society of Mechanical Engineers (ASME)",
-    tagline: "President, Treasurer, SDSU",
+    title: "President & Treasurer",
+    tagline: "American Society of Mechanical Engineers (ASME), SDSU",
     thumb: "images/leadership/asme-final-gbm-group.jpg",
     dates: "June 2023 – May 2025",
     finalImages: [
@@ -985,7 +1068,8 @@ const PROJECTS = [
           "images/leadership/asme-process-final-gbm-flyer.jpg"
         ], text: "Welcome back, trivia night, ASME x SHPE bowling, and the final GBM", wide: true },
       { heading: "Behind the scenes",
-        text: "Ran the business side of the club. Helped put together grant applications, including the funding proposal that secured a $17,000 grant, and managed budgeting and reimbursements as treasurer. Filed the paperwork to get ASME recognized with the university, held and facilitated officer meetings to plan the semester, and created the slides for our general body meetings." }
+        text: "Ran the business side of the club. Helped put together grant applications, including the funding proposal that secured a $17,000 grant, and managed budgeting and reimbursements as treasurer. Filed the paperwork to get ASME recognized with the university, held and facilitated officer meetings to plan the semester, and created the slides for our general body meetings." },
+      { image: "images/leadership/asme-process-leading-gbm.jpg", wide: true, text: "Leading a general body meeting as president" }
     ],
     tags: ["Event Planning", "Budget Management", "Community Outreach"],
     description: `

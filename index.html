@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=39">
+<link rel="stylesheet" href="css/style.css?v=44">
 <script>
   // Defined here (not in js/main.js) so it exists before any <img onerror> in the
   // page body can fire — those load during initial HTML parsing, ahead of scripts
@@ -112,9 +112,23 @@
     <h2 class="section-heading">About</h2>
     <hr class="rule" style="margin-bottom:2rem;">
     <div class="about-content">
-      <div class="about-photo">
-        <!-- Drop your photo at images/about-photo.jpg (any image works, just keep this filename) -->
-        <img src="images/about-photo.jpg" alt="Paulette Suro" onerror="handleImgError(this)">
+      <div class="about-photos">
+        <figure class="about-photo about-photo-main" tabindex="0">
+          <div class="about-photo-frame">
+            <img src="images/about-cleanroom-wall.jpg" alt="Paulette sitting outside the NanoFAB cleanroom, where her name is part of the circuit design on the glass" onerror="handleImgError(this)">
+            <!-- Hidden until hover/tap: a hand-drawn circle around the name in
+                 the glass decal. Positioned in % of the photo, measured on
+                 images/about-cleanroom-wall.jpg (name centered ~62.5%, 64%). -->
+            <svg class="name-circle" viewBox="0 0 100 40" aria-hidden="true" preserveAspectRatio="none">
+              <ellipse cx="50" cy="20" rx="47" ry="17" pathLength="1"/>
+            </svg>
+          </div>
+          <figcaption>Graduation 2026 (hover on the pic :)</figcaption>
+        </figure>
+        <figure class="about-photo">
+          <img src="images/about-graduation-friends.jpg" alt="Paulette with friends at her M.S. graduation" onerror="handleImgError(this)">
+          <figcaption>M.S. graduation, 2026</figcaption>
+        </figure>
       </div>
       <div class="about-text">
         <p>I'm currently finishing my M.S. in Bioengineering at San Diego
@@ -221,8 +235,8 @@
   <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next photo">&rarr;</button>
 </div>
 
-<script src="js/data.js?v=53"></script>
+<script src="js/data.js?v=79"></script>
 <script src="js/toolbox-data.js?v=37"></script>
-<script src="js/main.js?v=41"></script>
+<script src="js/main.js?v=45"></script>
 </body>
 </html>

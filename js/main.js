@@ -134,8 +134,14 @@ function processStepTemplate(step, index, alt) {
       </div>
     `;
   }
+  const columnsStyle = step.columns ? ` style="grid-template-columns: repeat(${step.columns}, minmax(0, 1fr))"` : "";
   const media = step.images && step.images.length
-    ? `<div class="process-row-pair">${step.images.map(src => galleryMediaTemplate(src, alt)).join("")}</div>`
+    ? `<div class="process-row-pair"${columnsStyle}>${step.images.map((src, i) => {
+        const item = galleryMediaTemplate(src, alt);
+        return step.labels && step.labels[i]
+          ? `<div class="media-labeled">${item}<span class="media-label">${step.labels[i]}</span></div>`
+          : item;
+      }).join("")}</div>`
     : galleryMediaTemplate(step.image, alt);
   if (step.wide) {
     return `
@@ -476,7 +482,24 @@ function openModal(project) {
   overlay.classList.add("open");
   document.body.style.overflow = "hidden";
   overlay.scrollTop = 0;
+
+  // Videos are injected while the modal is still hidden, so the browser's
+  // own autoplay never kicks in, and browsers pause offscreen muted video to
+  // save power. Play each loop when it scrolls into view, pause it when it
+  // leaves.
+  modalVideoObserver.disconnect();
+  overlay.querySelectorAll("video[autoplay]").forEach(video => {
+    video.muted = true;
+    modalVideoObserver.observe(video);
+  });
 }
+
+const modalVideoObserver = new IntersectionObserver(entries => {
+  entries.forEach(({ target: video, isIntersecting }) => {
+    if (isIntersecting) video.play().catch(() => {});
+    else video.pause();
+  });
+}, { threshold: 0.25 });
 
 function closeModal() {
   overlay.classList.remove("open");

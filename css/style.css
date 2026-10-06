@@ -660,17 +660,82 @@ a { color: inherit; }
 
 .about-content {
   display: grid;
-  grid-template-columns: 220px 1fr;
+  grid-template-columns: minmax(0, 400px) minmax(0, 1fr);
   gap: 2.5rem;
   align-items: start;
 }
 
+/* Stacked photo prints: the first one leads, the second sits a little
+   smaller and offset, like snapshots pinned to a page. */
+.about-photos {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.about-photo {
+  margin: 0;
+  background: #fff;
+  padding: 8px 8px 0;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 6px 16px rgba(28, 25, 23, 0.1);
+}
+
+.about-photo + .about-photo {
+  width: 78%;
+  justify-self: end;
+  rotate: 1.2deg;
+}
+
+.about-photo-main { rotate: -0.8deg; }
+
 .about-photo img {
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 3 / 2;
   object-fit: cover;
   display: block;
-  border: 1px solid var(--card-border);
+}
+
+/* Easter egg: hovering (or tapping) the cleanroom photo draws a circle
+   around the name on the glass. */
+.about-photo-frame { position: relative; }
+
+.about-photo-main { cursor: help; outline: none; }
+
+.name-circle {
+  position: absolute;
+  left: 62.6%;
+  top: 63.9%;
+  width: 12%;
+  height: 6%;
+  translate: -50% -50%;
+  rotate: 51deg;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.name-circle ellipse {
+  fill: none;
+  stroke: #ffe9c7;
+  stroke-width: 2.5;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.7s ease;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.6));
+}
+
+.about-photo-main:hover .name-circle ellipse,
+.about-photo-main:focus-visible .name-circle ellipse,
+.about-photo-main:focus .name-circle ellipse {
+  stroke-dashoffset: 0;
+}
+
+.about-photo figcaption {
+  font-family: var(--hand);
+  font-size: 1.1rem;
+  color: var(--ink);
+  padding: 0.25rem 0.2rem 0.4rem;
 }
 
 .about-text p {
@@ -687,7 +752,7 @@ a { color: inherit; }
 
 @media (max-width: 640px) {
   .about-content { grid-template-columns: 1fr; }
-  .about-photo { max-width: 200px; margin: 0 auto; }
+  .about-photo + .about-photo { width: 85%; }
 }
 
 /* ---------------- Footer ---------------- */
@@ -813,7 +878,9 @@ a { color: inherit; }
 .modal-body {
   padding: 1.25rem 2rem 1rem;
   display: grid;
-  grid-template-columns: 1fr 260px;
+  /* minmax(0, 1fr): a tall hero photo can't force this column wider and
+     push the sidebar out of the modal. */
+  grid-template-columns: minmax(0, 1fr) 260px;
   gap: 2.5rem;
   align-items: start;
 }
@@ -887,7 +954,7 @@ a { color: inherit; }
 /* ---- Hero block: one big image + up to 3 small supports, not a gallery ---- */
 .modal-hero-block {
   display: grid;
-  grid-template-columns: 1fr 110px;
+  grid-template-columns: minmax(0, 1fr) 110px;
   gap: 10px;
   position: relative;
 }
@@ -1333,6 +1400,26 @@ a { color: inherit; }
   margin: 0;
 }
 
+/* Per-image corner labels (a step's `labels`), e.g. electrode thickness on
+   each simulation clip. */
+.media-labeled { position: relative; min-width: 0; }
+
+.media-label {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  background: rgba(251, 247, 239, 0.92);
+  border: 1px solid var(--card-border);
+  border-left: 3px solid var(--oxblood);
+  padding: 0.15rem 0.45rem;
+  pointer-events: none;
+}
+
 /* Text between images: a full-width section that explains what's coming
    next (or what was just shown) — no image, no step number. */
 .process-note {
@@ -1527,9 +1614,9 @@ a { color: inherit; }
   .modal-overlay { padding: 0; }
   .modal { max-width: 100%; max-height: 100vh; height: 100%; }
   .modal-topbar { padding: 1.1rem 1.25rem 0; flex-wrap: wrap; row-gap: 0.6rem; }
-  .modal-body { grid-template-columns: 1fr; padding: 1.1rem 1.25rem 1rem; gap: 1.75rem; }
+  .modal-body { grid-template-columns: minmax(0, 1fr); padding: 1.1rem 1.25rem 1rem; gap: 1.75rem; }
   .modal-main h3 { font-size: 1.35rem; }
-  .modal-hero-block { grid-template-columns: 1fr; }
+  .modal-hero-block { grid-template-columns: minmax(0, 1fr); }
   .modal-hero-support { flex-direction: row; flex-wrap: wrap; }
   .modal-hero-support .support-thumb { flex: 1 1 100px; min-width: 90px; }
   .modal-process { margin: 1.5rem 1.25rem 2rem; }
