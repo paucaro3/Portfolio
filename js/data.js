@@ -708,7 +708,7 @@ const PROJECTS = [
     thumb: "images/experience/hardware-final-illustration.jpg",
     dates: "May 2024 – August 2024",
     problem: "Thermostats have to recover on their own from blackouts, brownouts, and voltage swings, and the hardware team needed a way to test that reliably over the long term.",
-    role: "Designed and built the test platform, wrote and verified its control scripts, and documented the new power-supply software in an SOP. Also installed humidity control for the test chamber.",
+    role: "Built the test platform, wrote and verified its control scripts, and documented the new power-supply software in an SOP. Also installed humidity control for the test chamber.",
     keyResults: [
       "Power wall still in use at the site today",
       "One set of scripts works across thermostat voltage ratings",
@@ -717,7 +717,7 @@ const PROJECTS = [
     finalImages: ["images/experience/hardware-final-illustration.jpg"],
     process: [
       { heading: "Why reboot reliability matters",
-        text: "Thermostats have to come back on by themselves after blackouts, brownouts, and other voltage changes. The hardware team needed long-term reboot reliability data on their devices, so I designed and built a test platform, the power wall, to run those tests automatically." },
+        text: "Thermostats have to come back on by themselves after blackouts, brownouts, and other voltage changes. The hardware team needed long-term reboot reliability data on their devices, so I built a test platform, the power wall, to run those tests automatically." },
       { image: "images/experience/hardware-process-relay-board.jpg", text: "Routing each thermostat's wire connectors back to the power supply" },
       { images: ["images/experience/hardware-process-electrical-box-vent.jpg", "images/experience/hardware-process-wire-connectors.jpg"],
         text: "Outlet box and wire connectors routing power across the wall" },
@@ -730,25 +730,25 @@ const PROJECTS = [
       { heading: "Handing it off",
         text: "By the end of the project, the team could run scripts on the new power supply on their own, using an SOP I wrote for the new software. The power wall is still in use at the site today." },
       { heading: "Thermal chamber study",
-        text: "To calibrate the team's temperature sensors, we needed to know each one's offset inside the chamber, but the sensors read too far apart from each other to calibrate accurately. I tracked the thermistors with a DataQ data acquisition system to check for uneven heating inside the chamber." },
+        text: "To calibrate the team's temperature sensors, we needed to know each one's offset inside the chamber, but the sensors read differently enough from each other that it was worth looking into before calibrating. I tracked the thermistors with a DataQ data acquisition system to check how evenly the chamber heated." },
       { image: "images/experience/hardware-process-thermal-chamber.jpg", text: "The thermal chamber" },
       { image: "images/experience/hardware-process-notebook-sketch.jpg", text: "Planning sensor placement inside the chamber" },
       { image: "images/experience/hardware-process-matlab-thermocouple-plot.jpg", text: "Sensor locations inside the chamber, plotted in MATLAB" },
       { heading: "What I recommended",
-        text: "Applying thermodynamics principles, I experimented with building enclosures to hold the thermostats and give them a more controlled environment inside the chamber, aiming to bring the readings closer together. But a longer soak time was the only change that made a reliable difference. I recommended the soak-time adjustment and left it to the managers to weigh whether the extra time and resources were worth it. Along the way, the team got a much clearer picture of how their tools behave." },
+        text: "Applying thermodynamics principles, I experimented with building enclosures to hold the thermostats and give them a more controlled environment inside the chamber, aiming to bring the readings closer together. But a longer soak time was the only change that made a reliable difference. I recommended the soak-time adjustment and left it to the managers to weigh whether the extra time and resources were worth it. In the end, the team had a profiled test chamber to work from." },
       { heading: "Adding humidity control to the chamber",
         text: "In a separate project, I set up humidity control for the chamber in house, since having someone else install it would have cost more. I installed the relays and did the wiring, plumbed in a filter, water container, and tubing, and contacted the manufacturer directly with questions that came up during installation." },
       { image: "images/experience/hardware-process-control-panel-illustration.jpg", wide: true, text: "Relays and wiring I installed in the chamber's control panel, plus the water, filter, and tubing for humidity" }
     ],
     tags: ["Hardware Testing", "Power Supply Scripting", "Oscilloscopes", "DAQ", "MATLAB", "DOE"],
     description: `
-      <p>Designed and built an automated hardware validation platform, the
+      <p>Built and automated a hardware validation platform, the
       power wall, to test thermostat reboot reliability through blackouts,
       brownouts, and fluctuating voltage, using programmable power-supply
       scripts verified on an oscilloscope. It's still in use at the site
       today.</p>
       <p>Also ran a thermal distribution study (thermistors, DataQ, MATLAB)
-      that found uneven heating inside the test chamber and recommended a
+      that profiled the heating inside the test chamber and recommended a
       longer soak time (DOE), and installed humidity control for the
       chamber: relays, wiring, filter, water container, and tubing.</p>
     `,
