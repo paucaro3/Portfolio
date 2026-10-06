@@ -670,7 +670,7 @@ const PROJECTS = [
     category: "experience",
     title: "Firmware Engineering Intern",
     tagline: "Automated Firmware Relay Validation · Universal Electronics",
-    thumb: "images/experience/firmware-final-illustration.jpg",
+    thumb: "images/experience/firmware-hero-illustration.jpg",
     dates: "May 2025 – August 2025",
     problem: "A smart thermostat's safety mitigation tests had to be run by hand on two different PCB boards, and each board talks over a different RF protocol.",
     role: "Automated the full mitigation test suite for both boards: one through the Z-Wave Compliance Test Tool, the other with Python over Zigbee.",
@@ -679,7 +679,7 @@ const PROJECTS = [
       "Both boards report their own pass/fail results",
       "Saved an hour of manual testing per run"
     ],
-    finalImages: ["images/experience/firmware-final-illustration.jpg"],
+    finalImages: ["images/experience/firmware-hero-illustration.jpg"],
     process: [
       { heading: "What the tests check",
         text: "The thermostat's firmware has several safety features for when something goes wrong, some of them staged across multiple steps. Every one of those had to be verified on two different PCB boards." },
