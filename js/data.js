@@ -718,8 +718,8 @@ const PROJECTS = [
     process: [
       { heading: "Why reboot reliability matters",
         text: "Thermostats have to come back on by themselves after blackouts, brownouts, and other voltage changes. The hardware team needed long-term reboot reliability data on their devices, so I designed and built a test platform, the power wall, to run those tests automatically." },
-      { image: "images/experience/hardware-process-wire-routing-illustration.jpg", text: "Routing each thermostat's wire connectors back to the power supply" },
-      { image: "images/experience/hardware-process-outlet-connectors-illustration.jpg",
+      { image: "images/experience/hardware-process-relay-board.jpg", text: "Routing each thermostat's wire connectors back to the power supply" },
+      { images: ["images/experience/hardware-process-electrical-box-vent.jpg", "images/experience/hardware-process-wire-connectors.jpg"],
         text: "Outlet box and wire connectors routing power across the wall" },
       { heading: "Writing the test scripts",
         text: "Each control script sets a voltage for a set amount of time. I wrote a full suite: brownout tests at 24V and 30V; a random on/off voltage variation test; on/off tests that cycle 1 s off and 0.1 s on, or 15 s on and 0.05 s off, while stepping up the voltage; and input voltage variation tests using sine and square waves on 12 s ramps, plus one that combines both." },
