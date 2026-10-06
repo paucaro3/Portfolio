@@ -670,7 +670,7 @@ const PROJECTS = [
     category: "experience",
     title: "Firmware Engineering Intern",
     tagline: "Automated Firmware Relay Validation · Universal Electronics",
-    thumb: "images/experience/firmware-process-zwave-ctt-results.jpg",
+    thumb: "images/experience/firmware-final-illustration.jpg",
     dates: "May 2025 – August 2025",
     problem: "A smart thermostat's safety mitigation tests had to be run by hand on two different PCB boards, and each board talks over a different RF protocol.",
     role: "Automated the full mitigation test suite for both boards: one through the Z-Wave Compliance Test Tool, the other with Python over Zigbee.",
@@ -679,14 +679,12 @@ const PROJECTS = [
       "Both boards report their own pass/fail results",
       "Saved an hour of manual testing per run"
     ],
-    finalImages: ["images/experience/firmware-process-zwave-ctt-results.jpg"],
+    finalImages: ["images/experience/firmware-final-illustration.jpg"],
     process: [
       { heading: "What the tests check",
         text: "The thermostat's firmware has several safety features for when something goes wrong, some of them staged across multiple steps. Every one of those had to be verified on two different PCB boards." },
       { heading: "Two boards, two protocols",
         text: "The two boards communicate over different RF signals, Z-Wave and Zigbee, so each one needed its own automation. I built the Z-Wave version in the Z-Wave Compliance Test Tool (CTT), where each test step is sent, checked, and logged as a pass, and the Zigbee version in Python." },
-      { image: "images/experience/firmware-process-python-test-log.jpg", wide: true,
-        text: "The Python version stepping through a test: sending commands, waiting for reports, and counting the relay notifications that come back before reporting a pass" },
       { heading: "The result",
         text: "Both versions run fully automated and report their own results, making the tests repeatable across both hardware platforms and saving an hour of manual testing per run." }
     ],

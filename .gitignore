@@ -1,1 +1,4 @@
 .claude/
+
+# Private visitor-stats dashboard (API token + generated stats). Never publish.
+stats/
